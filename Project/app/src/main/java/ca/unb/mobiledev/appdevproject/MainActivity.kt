@@ -6,6 +6,8 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.layout.LazyLayout
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -39,8 +41,7 @@ class MainActivity : ComponentActivity() {
 fun scanQRCode(context : Context) {
     //configure options for qrcode scanner
     val options = GmsBarcodeScannerOptions.Builder()
-        .setBarcodeFormats(
-            Barcode.FORMAT_QR_CODE)
+        .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
         .build()
 
     //instantiate scanner
@@ -52,20 +53,20 @@ fun scanQRCode(context : Context) {
             val rawValue: String? = barcode.rawValue
             val duration = Toast.LENGTH_SHORT
 
-            val toast = Toast.makeText(context, rawValue, duration) // in Activity
+            val toast = Toast.makeText(context, rawValue, duration)
             toast.show()
         }
         .addOnCanceledListener {
             val text = "Canceled"
             val duration = Toast.LENGTH_SHORT
 
-            val toast = Toast.makeText(context, text, duration) // in Activity
+            val toast = Toast.makeText(context, text, duration)
             toast.show()
         }
         .addOnFailureListener { e ->
             val duration = Toast.LENGTH_SHORT
 
-            val toast = Toast.makeText(context, e.toString(), duration) // in Activity
+            val toast = Toast.makeText(context, e.toString(), duration)
             toast.show()
         }
 }

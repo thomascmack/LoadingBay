@@ -11,4 +11,6 @@
         android:layout_height="wrap_content"
         android:text="@string/scan_qr_code" />
 
+
+
 </LinearLayout>
