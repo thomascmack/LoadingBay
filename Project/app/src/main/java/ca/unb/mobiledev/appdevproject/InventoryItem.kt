@@ -1,9 +1,12 @@
+package ca.unb.mobiledev.appdevproject
+
 /**
  * Represents a single item in the inventory.
  */
 
 data class InventoryItem(
-    val type: String,       // eg "square", "circle"
-    val itemNum: Int,       // unique per item of the same type
-    val damaged: Boolean,   // true if item is damaged
+    val name: String,       // eg "square", "circle"
+    val id: Int,       // unique per item of the same type
+    var quantity: Int, // total count of items of this type
+    var damaged: Int // count of damaged items of this type
 )
