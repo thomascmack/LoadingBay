@@ -91,9 +91,10 @@ class MainActivity : ComponentActivity() {
 
     fun updateTextView() {
         if(scannedItems.isNotEmpty()) {
-            itemName.text = scannedItems.last().name
-            itemID.text = scannedItems.last().id.toString()
-            itemQuantity.text = "x" + scannedItems.last().quantity
+            val i = scannedItems.top()
+            itemName.text = i.name
+            itemID.text = i.id.toString()
+            itemQuantity.text = "x" + i.quantity.toString()
         }
         else {
             itemName.text = "Please scan an item"
