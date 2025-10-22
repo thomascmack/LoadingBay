@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background"
+    android:gravity="center"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:src="@drawable/login_image"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:hint="Employee ID"
+            android:textColor="@color/forest_green"
+            android:textColorHint="#909090"
+            android:textSize="20sp"
+            android:background="@drawable/login_field_background"
+            android:padding="18dp"
+            android:inputType="text"
+            android:id="@+id/employeeID_input"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Password"
+            android:textColor="@color/forest_green"
+            android:textColorHint="#909090"
+            android:textSize="20sp"
+            android:background="@drawable/login_field_background"
+            android:padding="18dp"
+            android:inputType="textPassword"
+            android:id="@+id/password_input"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log In"
+            android:background="@drawable/button1"
+            android:textColor="@color/white"
+            android:padding="18dp"
+            android:layout_marginTop="32dp"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            android:id="@+id/login_button"/>
+
+        <!-- maybe not bet way to do this, but should work -->
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password?"
+            android:background="@color/white"
+            android:textColor="@color/forest_green"
+            android:padding="18dp"
+            android:layout_marginTop="8dp"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            android:id="@+id/forgotPassword_button"/>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
