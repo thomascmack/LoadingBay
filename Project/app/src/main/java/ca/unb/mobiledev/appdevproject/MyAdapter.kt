@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter(private val items : ArrayList<InventoryItem>) :
+class MyAdapter(private val items : ArrayList<ItemList.AggregateItem>) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -27,8 +27,8 @@ class MyAdapter(private val items : ArrayList<InventoryItem>) :
 
         holder.courseIdTextView.text = holder.resources!!.getString(R.string.item_id, item.id)
         holder.courseNameTextView.text = holder.resources.getString(R.string.item_name, item.name)
-        holder.itemQuantityTextView.text = holder.resources.getString(R.string.quantity, item.quantity)
-        holder.damagedTextView.text = holder.resources.getString(R.string.num_damaged, item.damaged)
+        holder.itemQuantityTextView.text = holder.resources.getString(R.string.quantity, item.count)
+        holder.damagedTextView.text = holder.resources.getString(R.string.num_damaged, item.countDamaged)
 
         //holder.itemView.setOnClickListener { listener(course) }
     }

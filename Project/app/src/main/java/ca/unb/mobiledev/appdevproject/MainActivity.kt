@@ -64,9 +64,8 @@ class MainActivity : ComponentActivity() {
 
         damaged.tag = true
         damaged.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(scannedItems.isNotEmpty() && buttonView.tag == true) {
-                if (isChecked) scannedItems.top().damaged++ else scannedItems.top().damaged--
-                Log.d("Shipping Manifest", scannedItems.top().damaged.toString())
+            if(scannedItems.isNotEmpty() && damaged.tag == true) {
+                scannedItems.setDamage(scannedItems.top())
             }
         }
     }
@@ -112,7 +111,7 @@ class MainActivity : ComponentActivity() {
     fun updateTextView() {
         if(scannedItems.isNotEmpty()) {
             damaged.tag = false
-            damaged.isChecked = false
+            damaged.isChecked = scannedItems.top().damaged
             damaged.tag = true
             val i = scannedItems.top()
             itemName.text = i.name

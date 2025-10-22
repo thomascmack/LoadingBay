@@ -6,39 +6,62 @@ package ca.unb.mobiledev.appdevproject
 
 class ItemList : ArrayList<InventoryItem>() {
 
-    private var itemStack = ArrayDeque<InventoryItem>()
+    private var aggregateList = ArrayList<AggregateItem>()
 
     // Add an item to the manifest
     fun push(id : Long, name : String) {
-        val index = hasItem(id)
-        if(index >= 0) {
-            this[index].quantity++
-            itemStack.addLast(this[index])
+        val item = InventoryItem(name, id, false)
+        this.add(item)
+        val i = hasItem(item)
+        if(i >= 0) {
+            aggregateList[i].count++
         }
         else {
-            this.add(InventoryItem(name, id, 1, 0))
-            itemStack.addLast(this.last())
+            aggregateList.add(AggregateItem(id, name))
         }
     }
 
     fun pop() {
         if(this.isNotEmpty()) {
-            val i = itemStack.removeLast()
-            i.quantity--
-            if(i.quantity < 1) this.remove(i)
+            val i = this.removeAt(this.size - 1)
+            val iAggr = itemInAggr(i)
+            iAggr!!.count --
+            if(i.damaged) iAggr.countDamaged--
+            if(iAggr.count == 0) aggregateList.remove(iAggr)
         }
     }
 
-    fun hasItem(id : Long): Int {
-        for (item in this) {
-            if(item.id == id) {
-                return this.indexOf(item)
+    fun setDamage(item: InventoryItem) {
+        item.damaged = !item.damaged
+        if(item.damaged) itemInAggr(item)!!.countDamaged++ else itemInAggr(item)!!.countDamaged--
+    }
+
+    fun itemInAggr(item : InventoryItem): AggregateItem? {
+        for(aggrItem in aggregateList) {
+            if(aggrItem.id == item.id) {
+                return aggrItem
             }
         }
-        return -1
+        return null
+    }
+
+    fun hasItem(item : InventoryItem): Int {
+        return aggregateList.indexOf(itemInAggr(item))
     }
 
     fun top(): InventoryItem {
-        return itemStack.last()
+        return this.last()
+    }
+
+    fun getAggregate(): ArrayList<AggregateItem> {return aggregateList}
+
+    data class AggregateItem(var id: Long, var name: String) {
+        var count : Int = 1
+        var countDamaged : Int = 0
+
+        fun add(item: InventoryItem) {
+            this.add(item)
+            if(item.damaged) countDamaged++
+        }
     }
 }
