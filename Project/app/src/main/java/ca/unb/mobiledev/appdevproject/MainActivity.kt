@@ -3,7 +3,6 @@ package ca.unb.mobiledev.appdevproject
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.RelativeLayout
@@ -14,6 +13,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 
@@ -27,6 +27,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var damaged : CheckBox
 
     private lateinit var viewFullList : Button
+    private lateinit var scanner : GmsBarcodeScanner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +39,19 @@ class MainActivity : ComponentActivity() {
             insets
         }
 
+        //configure options for qrcode scanner
+        val options = GmsBarcodeScannerOptions.Builder()
+            .setBarcodeFormats(Barcode.FORMAT_UPC_A)
+            .build()
+
+        //instantiate scanner
+        scanner = GmsBarcodeScanning.getClient(this, options)
+
         itemLayout = findViewById(R.id.item_view)
         itemLayout.visibility = RelativeLayout.INVISIBLE
         scanButton = findViewById(R.id.scanButton)
         itemName = findViewById(R.id.itemName)
         itemID = findViewById(R.id.itemID)
-        //itemQuantity = findViewById(R.id.quantity)
         undoButton = findViewById(R.id.undoButton)
         damaged = findViewById(R.id.damaged)
         viewFullList = findViewById(R.id.fullList)
@@ -71,14 +79,6 @@ class MainActivity : ComponentActivity() {
     }
 
     fun scanQRCode(context : Context) {
-        //configure options for qrcode scanner
-        val options = GmsBarcodeScannerOptions.Builder()
-            .setBarcodeFormats(Barcode.FORMAT_UPC_A)
-            .build()
-
-        //instantiate scanner
-        val scanner = GmsBarcodeScanning.getClient(context, options)
-
         //start scan and handle results
         scanner.startScan()
             .addOnSuccessListener { barcode ->
