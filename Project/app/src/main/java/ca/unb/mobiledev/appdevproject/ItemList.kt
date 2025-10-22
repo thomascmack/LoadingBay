@@ -9,7 +9,7 @@ class ItemList : ArrayList<InventoryItem>() {
     private var itemStack = ArrayDeque<InventoryItem>()
 
     // Add an item to the manifest
-    fun push(id : Int, name : String) {
+    fun push(id : Long, name : String) {
         val index = hasItem(id)
         if(index >= 0) {
             this[index].quantity++
@@ -29,7 +29,7 @@ class ItemList : ArrayList<InventoryItem>() {
         }
     }
 
-    fun hasItem(id : Int): Int {
+    fun hasItem(id : Long): Int {
         for (item in this) {
             if(item.id == id) {
                 return this.indexOf(item)

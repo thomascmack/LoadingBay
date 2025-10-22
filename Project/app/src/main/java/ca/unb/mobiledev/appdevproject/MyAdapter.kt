@@ -1,5 +1,6 @@
 package ca.unb.mobiledev.appdevproject
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,7 @@ class MyAdapter(private val items : ArrayList<InventoryItem>) :
         parent: ViewGroup,
         viewType: Int
     ): MyViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.scanned_list_view, parent, false)
         return MyViewHolder(view)
     }
 
@@ -24,9 +25,10 @@ class MyAdapter(private val items : ArrayList<InventoryItem>) :
 
         val item = items.elementAt(position)
 
-        holder.courseIdTextView.text = item.id.toString()
-        holder.courseNameTextView.text = item.name
-       // holder.itemQuantityTextView.text = item.quantity.toString()
+        holder.courseIdTextView.text = holder.resources!!.getString(R.string.item_id, item.id)
+        holder.courseNameTextView.text = holder.resources.getString(R.string.item_name, item.name)
+        holder.itemQuantityTextView.text = holder.resources.getString(R.string.quantity, item.quantity)
+        holder.damagedTextView.text = holder.resources.getString(R.string.num_damaged, item.damaged)
 
         //holder.itemView.setOnClickListener { listener(course) }
     }
@@ -39,6 +41,8 @@ class MyAdapter(private val items : ArrayList<InventoryItem>) :
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val courseIdTextView: TextView = itemView.findViewById(R.id.itemID)
         val courseNameTextView: TextView = itemView.findViewById(R.id.itemName)
-       // val itemQuantityTextView: TextView = itemView.findViewById(R.id.quantity)
+        val itemQuantityTextView: TextView = itemView.findViewById(R.id.quantity)
+        val damagedTextView : TextView = itemView.findViewById(R.id.damaged)
+        val resources: Resources? = itemView.context.resources
     }
 }

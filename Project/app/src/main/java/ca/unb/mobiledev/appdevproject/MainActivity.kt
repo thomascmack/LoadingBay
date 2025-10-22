@@ -1,10 +1,12 @@
 package ca.unb.mobiledev.appdevproject
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -16,15 +18,15 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 
 class MainActivity : ComponentActivity() {
-    private val inv = mapOf(1000 to "square", 1001 to "circle", 1002 to "triangle")
-    private val scannedItems = ItemList()
 
+    private lateinit var itemLayout : RelativeLayout
     private lateinit var itemName : TextView
     private lateinit var itemID : TextView
-    //private lateinit var itemQuantity : TextView
     private lateinit var scanButton : Button
     private lateinit var undoButton : Button
     private lateinit var damaged : CheckBox
+
+    private lateinit var viewFullList : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,12 +38,15 @@ class MainActivity : ComponentActivity() {
             insets
         }
 
+        itemLayout = findViewById(R.id.item_view)
+        itemLayout.visibility = RelativeLayout.INVISIBLE
         scanButton = findViewById(R.id.scanButton)
         itemName = findViewById(R.id.itemName)
         itemID = findViewById(R.id.itemID)
         //itemQuantity = findViewById(R.id.quantity)
         undoButton = findViewById(R.id.undoButton)
         damaged = findViewById(R.id.damaged)
+        viewFullList = findViewById(R.id.fullList)
 
         undoButton.setOnClickListener {
             scannedItems.pop()
@@ -50,6 +55,11 @@ class MainActivity : ComponentActivity() {
 
         scanButton.setOnClickListener {
             scanQRCode(this)
+        }
+
+        viewFullList.setOnClickListener {
+            val intent = Intent(this@MainActivity, ScannedList::class.java)
+            startActivity(intent)
         }
 
         damaged.tag = true
@@ -64,7 +74,7 @@ class MainActivity : ComponentActivity() {
     fun scanQRCode(context : Context) {
         //configure options for qrcode scanner
         val options = GmsBarcodeScannerOptions.Builder()
-            .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
+            .setBarcodeFormats(Barcode.FORMAT_UPC_A)
             .build()
 
         //instantiate scanner
@@ -74,17 +84,14 @@ class MainActivity : ComponentActivity() {
         scanner.startScan()
             .addOnSuccessListener { barcode ->
                 val rawValue: String? = barcode.rawValue
-                val id = rawValue?.toInt() ?: 0
-//                val duration = Toast.LENGTH_SHORT
-//
-//                val toast = Toast.makeText(context, id.toString(), duration)
-//                toast.show()
+                val id = rawValue?.toLong() ?: 0
+                val duration = Toast.LENGTH_SHORT
+
+                val toast = Toast.makeText(context, id.toString(), duration)
+                toast.show()
 
                 if(inv.containsKey(id)) {
                     scannedItems.push(id, inv.getValue(id))
-                    damaged.tag = false
-                    damaged.isChecked = false
-                    damaged.tag = true
                     updateTextView()
                 }
             }
@@ -101,20 +108,28 @@ class MainActivity : ComponentActivity() {
                 val toast = Toast.makeText(context, e.toString(), duration)
                 toast.show()
             }
-
     }
-
     fun updateTextView() {
         if(scannedItems.isNotEmpty()) {
+            damaged.tag = false
+            damaged.isChecked = false
+            damaged.tag = true
             val i = scannedItems.top()
             itemName.text = i.name
             itemID.text = i.id.toString()
-            //itemQuantity.text = "x" + i.quantity.toString()
+            itemLayout.visibility = RelativeLayout.VISIBLE
         }
         else {
-            itemName.text = "Please scan an item"
-            itemID.text = null
-            //itemQuantity.text = null
+            itemLayout.visibility = RelativeLayout.INVISIBLE
         }
+    }
+
+    companion object {
+        private val scannedItems = ItemList()
+        private val inv = mapOf(777499239876 to "Neil Young - Decade",
+                                75678124020 to "Phil Collins - No Jacket Required",
+                                606949304522 to "Weezer - Green Album")
+
+        fun getScannedItems(): ItemList {return scannedItems}
     }
 }
