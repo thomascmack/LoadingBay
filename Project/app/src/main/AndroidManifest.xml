@@ -11,10 +11,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppDevProject">
         <activity
+            android:name=".ScannedItem"
+            android:exported="false"
+            android:label="@string/title_activity_scanned_item"
+            android:theme="@style/Theme.AppDevProject" />
+        <activity
             android:name=".ScannedList"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat">
-        </activity>
+            android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

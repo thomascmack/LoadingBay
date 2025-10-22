@@ -8,4 +8,7 @@
     <string name="damaged">Damaged</string>
     <string name="num_damaged">%d Dmg</string>
     <string name="view_full_list">View Full List</string>
+    <string name="scan_start">Scan an item to get started</string>
+    <string name="invalid_item">Item not found. Please scan again</string>
+    <string name="title_activity_scanned_item">ScannedItem</string>
 </resources>

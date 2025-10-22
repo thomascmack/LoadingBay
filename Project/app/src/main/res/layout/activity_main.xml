@@ -20,9 +20,18 @@
         android:text="@string/undo" />
 
     <include
-        layout="@layout/item_layout"
-        android:id="@+id/item_view"
-         />
+        android:id="@+id/start"
+        layout='@layout/start_layout'/>
+
+    <include
+        android:id="@+id/scannedItem"
+        android:visibility="gone"
+        layout='@layout/item_layout'/>
+
+    <include
+        android:id="@+id/invalidItem"
+        android:visibility="gone"
+        layout="@layout/invalid_item_layout"/>
 
     <Button
         android:id="@+id/fullList"
