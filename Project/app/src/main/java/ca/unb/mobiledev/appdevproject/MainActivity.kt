@@ -2,7 +2,9 @@ package ca.unb.mobiledev.appdevproject
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -19,9 +21,10 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var itemName : TextView
     private lateinit var itemID : TextView
-    private lateinit var itemQuantity : TextView
+    //private lateinit var itemQuantity : TextView
     private lateinit var scanButton : Button
     private lateinit var undoButton : Button
+    private lateinit var damaged : CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +39,9 @@ class MainActivity : ComponentActivity() {
         scanButton = findViewById(R.id.scanButton)
         itemName = findViewById(R.id.itemName)
         itemID = findViewById(R.id.itemID)
-        itemQuantity = findViewById(R.id.quantity)
+        //itemQuantity = findViewById(R.id.quantity)
         undoButton = findViewById(R.id.undoButton)
+        damaged = findViewById(R.id.damaged)
 
         undoButton.setOnClickListener {
             scannedItems.pop()
@@ -46,6 +50,14 @@ class MainActivity : ComponentActivity() {
 
         scanButton.setOnClickListener {
             scanQRCode(this)
+        }
+
+        damaged.tag = true
+        damaged.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(scannedItems.isNotEmpty() && buttonView.tag == true) {
+                if (isChecked) scannedItems.top().damaged++ else scannedItems.top().damaged--
+                Log.d("Shipping Manifest", scannedItems.top().damaged.toString())
+            }
         }
     }
 
@@ -63,15 +75,18 @@ class MainActivity : ComponentActivity() {
             .addOnSuccessListener { barcode ->
                 val rawValue: String? = barcode.rawValue
                 val id = rawValue?.toInt() ?: 0
-                val duration = Toast.LENGTH_SHORT
-
-                val toast = Toast.makeText(context, id.toString(), duration)
-                toast.show()
+//                val duration = Toast.LENGTH_SHORT
+//
+//                val toast = Toast.makeText(context, id.toString(), duration)
+//                toast.show()
 
                 if(inv.containsKey(id)) {
                     scannedItems.push(id, inv.getValue(id))
+                    damaged.tag = false
+                    damaged.isChecked = false
+                    damaged.tag = true
+                    updateTextView()
                 }
-                updateTextView()
             }
             .addOnCanceledListener {
                 val text = "Canceled"
@@ -94,12 +109,12 @@ class MainActivity : ComponentActivity() {
             val i = scannedItems.top()
             itemName.text = i.name
             itemID.text = i.id.toString()
-            itemQuantity.text = "x" + i.quantity.toString()
+            //itemQuantity.text = "x" + i.quantity.toString()
         }
         else {
             itemName.text = "Please scan an item"
             itemID.text = null
-            itemQuantity.text = null
+            //itemQuantity.text = null
         }
     }
 }

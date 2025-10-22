@@ -26,7 +26,7 @@ class MyAdapter(private val items : ArrayList<InventoryItem>) :
 
         holder.courseIdTextView.text = item.id.toString()
         holder.courseNameTextView.text = item.name
-        holder.itemQuantityTextView.text = item.quantity.toString()
+       // holder.itemQuantityTextView.text = item.quantity.toString()
 
         //holder.itemView.setOnClickListener { listener(course) }
     }
@@ -39,6 +39,6 @@ class MyAdapter(private val items : ArrayList<InventoryItem>) :
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val courseIdTextView: TextView = itemView.findViewById(R.id.itemID)
         val courseNameTextView: TextView = itemView.findViewById(R.id.itemName)
-        val itemQuantityTextView: TextView = itemView.findViewById(R.id.quantity)
+       // val itemQuantityTextView: TextView = itemView.findViewById(R.id.quantity)
     }
 }

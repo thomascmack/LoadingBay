@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">App Dev Project</string>
     <string name="scan_qr_code">Scan QR Code</string>
-    <string name="item_id">Item ID</string>
-    <string name="item_name">Item Name</string>
-    <string name="quantity">x 0</string>
+    <string name="item_id"> Item ID </string>
+    <string name="item_name">Item</string>
+    <string name="quantity"> x0</string>
     <string name="undo">Undo</string>
+    <string name="damaged">Damaged</string>
 </resources>
