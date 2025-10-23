@@ -2,6 +2,7 @@ package ca.unb.mobiledev.appdevproject
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -17,7 +18,15 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.SQLException
+import java.sql.SQLTimeoutException
+import kotlin.concurrent.thread
+
 class MainActivity : ComponentActivity() {
+    var connection : Connection? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -32,6 +41,40 @@ class MainActivity : ComponentActivity() {
 
         scanButton.setOnClickListener {
             scanQRCode(this)
+        }
+
+        val dbButton : Button = findViewById(R.id.dbButton)
+
+        dbButton.setOnClickListener {
+            connectToDatabase()
+        }
+
+
+    }
+
+    fun connectToDatabase() {
+        thread {
+            try {
+                connection = DriverManager.getConnection(
+                    "jdbc:postgresql://localhost:5432/appDevDB",
+                    "postgres",
+                    "12345"
+                )
+
+                runOnUiThread {
+                    Toast.makeText(this, "Connected to database", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: SQLException) {
+                runOnUiThread {
+                    Toast.makeText(this, "Error connecting to database: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+                Log.e(this::class.toString(), e.message, e)
+            } catch (e: SQLTimeoutException) {
+                runOnUiThread {
+                    Toast.makeText(this, "Database connection timed out: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+                Log.e(this::class.toString(), e.message, e)
+            }
         }
     }
 }

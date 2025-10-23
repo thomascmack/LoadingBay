@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">App Dev Project</string>
     <string name="scan_qr_code">Scan QR Code</string>
+    <string name="connect_to_database">Connect to Database</string>
 </resources>

@@ -11,4 +11,10 @@
         android:layout_height="wrap_content"
         android:text="@string/scan_qr_code" />
 
+    <Button
+        android:id="@+id/dbButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/connect_to_database" />
 </LinearLayout>
