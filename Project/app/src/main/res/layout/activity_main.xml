@@ -4,39 +4,141 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@drawable/login_background"
+    android:gravity="top"
+    android:orientation="vertical"
+    android:padding="16dp">
 
 
-    <Button
-        android:id="@+id/scanButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/scan_qr_code" />
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/undoButton"
-        android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/backButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/button3"
+                android:padding="18dp"
+                android:text="X"
+                android:textAllCaps="false"
+                android:textColor="@color/dark_grey"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/undoButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="3dp"
+                android:layout_weight="3"
+                android:background="@drawable/button2"
+                android:padding="18dp"
+                android:text="@string/undo"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/finishButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:layout_weight="3"
+                android:background="@drawable/button1"
+                android:padding="18dp"
+                android:text="Finish    >"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/start"
+            layout='@layout/start_layout' />
+
+        <include
+            android:id="@+id/scannedItem"
+            layout='@layout/item_layout'
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/invalidItem"
+            layout="@layout/invalid_item_layout"
+            android:visibility="gone" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/undo" />
+        android:gravity="center"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
 
-    <include
-        android:id="@+id/start"
-        layout='@layout/start_layout'/>
 
-    <include
-        android:id="@+id/scannedItem"
-        android:visibility="gone"
-        layout='@layout/item_layout'/>
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:text="@string/view_full_list"
+            android:background="@drawable/button2"
+            android:textColor="@color/white"
+            android:padding="18dp"
+            android:layout_marginEnd="10dp"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            android:id="@+id/fullList"/>
 
-    <include
-        android:id="@+id/invalidItem"
-        android:visibility="gone"
-        layout="@layout/invalid_item_layout"/>
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:text="@string/scan_qr_code"
+            android:background="@drawable/button1"
+            android:textColor="@color/white"
+            android:padding="18dp"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            android:id="@+id/scanButton"/>
 
-    <Button
-        android:id="@+id/fullList"
-        android:layout_width="wrap_content"
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/view_full_list" />
+        android:orientation="horizontal"
+        android:gravity="center">
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter Code Manually"
+            android:background="@drawable/button3"
+            android:textColor="@color/forest_green"
+            android:padding="18dp"
+            android:layout_marginStart="0dp"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            android:id="@+id/scanButton"/>
+
+
+    </LinearLayout>
+
 
 </LinearLayout>
