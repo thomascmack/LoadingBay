@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id 'com.google.devtools.ksp' version '2.2.20-2.0.3'
 }
 
 android {
@@ -37,7 +38,6 @@ android {
 }
 
 dependencies {
-
     implementation libs.androidx.core.ktx
     implementation libs.androidx.lifecycle.runtime.ktx
     implementation libs.androidx.activity.compose
@@ -58,4 +58,12 @@ dependencies {
     debugImplementation libs.androidx.compose.ui.tooling
     debugImplementation libs.androidx.compose.ui.test.manifest
     implementation libs.play.services.code.scanner
+
+    def room_version = "2.8.4"
+
+    implementation "androidx.room:room-runtime:$room_version"
+
+    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
+    // See KSP Quickstart to add KSP to your build
+    ksp "androidx.room:room-compiler:$room_version"
 }

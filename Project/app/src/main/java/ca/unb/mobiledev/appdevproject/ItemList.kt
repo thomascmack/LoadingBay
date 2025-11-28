@@ -1,5 +1,7 @@
 package ca.unb.mobiledev.appdevproject
 
+import ca.unb.mobiledev.appdevproject.entities.InventoryItem
+
 /**
  * Groups inventory items dynamically by their type.
  */
@@ -38,7 +40,7 @@ class ItemList : ArrayList<InventoryItem>() {
 
     fun itemInAggr(item : InventoryItem): AggregateItem? {
         for(aggrItem in aggregateList) {
-            if(aggrItem.id == item.id) {
+            if(aggrItem.id == item.upc) {
                 return aggrItem
             }
         }

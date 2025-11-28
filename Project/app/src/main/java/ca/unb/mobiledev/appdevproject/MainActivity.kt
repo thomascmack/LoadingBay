@@ -3,6 +3,7 @@ package ca.unb.mobiledev.appdevproject
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
@@ -12,11 +13,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
+import ca.unb.mobiledev.appdevproject.ui.ProductViewModel
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
-
 
 class MainActivity : ComponentActivity() {
 
@@ -30,8 +32,10 @@ class MainActivity : ComponentActivity() {
     private lateinit var undoButton : Button
     private lateinit var viewFullList : Button
     private lateinit var scanner : GmsBarcodeScanner
+    private lateinit var productViewModel : ProductViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("main", "hello")
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -87,6 +91,21 @@ class MainActivity : ComponentActivity() {
                 scannedItems.setDamage(scannedItems.top())
             }
         }
+
+        Log.i("main", "loading view model")
+        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+
+        productViewModel.searchItems.observe(this) { items ->
+            items?.let {
+                for(item in items) {
+                    scannedItems.push(item.upc, item.itemName)
+                }
+                updateScannedView()
+                switchViewTo(scannedView)
+                return@observe
+            }
+            switchViewTo(noItemView)
+        }
     }
 
     fun scanQRCode(context : Context) {
@@ -100,13 +119,7 @@ class MainActivity : ComponentActivity() {
                 val toast = Toast.makeText(context, id.toString(), duration)
                 toast.show()
 
-                if(inv.containsKey(id)) {
-                    scannedItems.push(id, inv.getValue(id))
-                    switchViewTo(scannedView)
-                }
-                else {
-                    switchViewTo(noItemView)
-                }
+                productViewModel.search(id)
             }
             .addOnCanceledListener {
                 val text = "Canceled"
@@ -151,7 +164,7 @@ class MainActivity : ComponentActivity() {
             damaged.tag = true
             val i = scannedItems.top()
             itemName.text = i.name
-            itemID.text = i.id.toString()
+            itemID.text = i.upc.toString()
         }
     }
 
