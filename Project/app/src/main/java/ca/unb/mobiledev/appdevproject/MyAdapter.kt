@@ -26,7 +26,7 @@ class MyAdapter(private val items : ArrayList<ItemList.AggregateItem>) :
         val item = items.elementAt(position)
 
         holder.courseIdTextView.text = holder.resources!!.getString(R.string.item_id, item.id)
-        holder.courseNameTextView.text = holder.resources.getString(R.string.item_name, item.name)
+        holder.courseNameTextView.text = holder.resources.getString(R.string.item_name, item.id)
         holder.itemQuantityTextView.text = holder.resources.getString(R.string.quantity, item.count)
         holder.damagedTextView.text = holder.resources.getString(R.string.num_damaged, item.countDamaged)
 

@@ -10,3 +10,7 @@ data class Product(
     @PrimaryKey val upc : Long,
     @ColumnInfo("itemName") val itemName : String
 )
+
+data class ProductName(
+    @ColumnInfo("itemName") val itemName: String
+)

@@ -34,6 +34,9 @@ class MainActivity : ComponentActivity() {
     private lateinit var scanner : GmsBarcodeScanner
     private lateinit var productViewModel : ProductViewModel
 
+    private var shipmentID : Long = 1
+    //private var manifest
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("main", "hello")
         super.onCreate(savedInstanceState)
@@ -66,16 +69,6 @@ class MainActivity : ComponentActivity() {
         undoButton = findViewById(R.id.undoButton)
         viewFullList = findViewById(R.id.fullList)
 
-        undoButton.setOnClickListener {
-            scannedItems.pop()
-            if(getScannedItems().isNotEmpty()) {
-                switchViewTo(scannedView)
-            }
-            else {
-                switchViewTo(startView)
-            }
-        }
-
         scanButton.setOnClickListener {
             scanQRCode(this)
         }
@@ -95,16 +88,36 @@ class MainActivity : ComponentActivity() {
         Log.i("main", "loading view model")
         productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
 
-        productViewModel.searchItems.observe(this) { items ->
-            items?.let {
-                for(item in items) {
-                    scannedItems.push(item.upc, item.itemName)
+        productViewModel.searchItems.observe(this) { products ->
+            products?.let {
+                for(p in products) {
+                    scannedItems.push(p.upc)
+                    damaged.tag = false
+                    damaged.isChecked = scannedItems.top().damaged
+                    damaged.tag = true
+                    itemName.text = p.itemName
+                    itemID.text = p.upc.toString()
                 }
-                updateScannedView()
                 switchViewTo(scannedView)
                 return@observe
             }
             switchViewTo(noItemView)
+        }
+
+        undoButton.setOnClickListener {
+            scannedItems.pop()
+            if(scannedItems.isNotEmpty()) {
+                productViewModel.search(scannedItems.top().upc)
+                /*search will push found item onto scannedItem stack
+                (intended behaviour when search is called from scanQRCode function)
+                don't want this to happen when undoing, so just pop added item off stack
+                TODO (maybe but probably not) find better solution for this
+                 */
+                scannedItems.pop()
+            }
+            else {
+                switchViewTo(startView)
+            }
         }
     }
 
@@ -144,7 +157,6 @@ class MainActivity : ComponentActivity() {
                 noItemView.visibility = View.GONE
             }
             scannedView -> {
-                updateScannedView()
                 startView.visibility = View.GONE
                 scannedView.visibility = View.VISIBLE
                 noItemView.visibility = View.GONE
@@ -157,24 +169,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun updateScannedView() {
-        if (getScannedItems().isNotEmpty()) {
-            damaged.tag = false
-            damaged.isChecked = scannedItems.top().damaged
-            damaged.tag = true
-            val i = scannedItems.top()
-            itemName.text = i.name
-            itemID.text = i.upc.toString()
-        }
-    }
-
-
     companion object {
         private val scannedItems = ItemList()
-        private val inv = mapOf(777499239876 to "CD - Neil Young Decade",
-                                75678124020 to "CD - Phil Collins No Jacket Required",
-                                606949304522 to "CD - Weezer Green Album")
-
         fun getScannedItems(): ItemList {return scannedItems}
     }
 }
