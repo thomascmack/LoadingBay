@@ -34,11 +34,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var scanner : GmsBarcodeScanner
     private lateinit var productViewModel : ProductViewModel
 
-    private var shipmentID : Long = 1
-    //private var manifest
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("main", "hello")
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -48,6 +44,13 @@ class MainActivity : ComponentActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        /* TODO add manifest scanning screen with intent to launch this activity 'manifest' will be
+           included in intent extras*/
+        manifest.addItem(1, 606949304522)
+        manifest.addItem(2, 75678124020)
+        manifest.addItem(3, 777499239876)
+        manifest.addItem(4, 777499239876)
 
         //configure options for qrcode scanner
         val options = GmsBarcodeScannerOptions.Builder()
@@ -80,8 +83,8 @@ class MainActivity : ComponentActivity() {
 
         damaged.tag = true
         damaged.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(scannedItems.isNotEmpty() && damaged.tag == true) {
-                scannedItems.setDamage(scannedItems.top())
+            if(damaged.tag == true) {
+                manifest.setDamage(manifest.top().itemID)
             }
         }
 
@@ -91,12 +94,7 @@ class MainActivity : ComponentActivity() {
         productViewModel.searchItems.observe(this) { products ->
             products?.let {
                 for(p in products) {
-                    scannedItems.push(p.upc)
-                    damaged.tag = false
-                    damaged.isChecked = scannedItems.top().damaged
-                    damaged.tag = true
-                    itemName.text = p.itemName
-                    itemID.text = p.upc.toString()
+                    manifest.scanItem(p.upc, p.itemName)
                 }
                 switchViewTo(scannedView)
                 return@observe
@@ -105,15 +103,9 @@ class MainActivity : ComponentActivity() {
         }
 
         undoButton.setOnClickListener {
-            scannedItems.pop()
-            if(scannedItems.isNotEmpty()) {
-                productViewModel.search(scannedItems.top().upc)
-                /*search will push found item onto scannedItem stack
-                (intended behaviour when search is called from scanQRCode function)
-                don't want this to happen when undoing, so just pop added item off stack
-                TODO (maybe but probably not) find better solution for this
-                 */
-                scannedItems.pop()
+            manifest.undo()
+            if(manifest.isNotEmpty()) {
+                switchViewTo(scannedView)
             }
             else {
                 switchViewTo(startView)
@@ -157,6 +149,11 @@ class MainActivity : ComponentActivity() {
                 noItemView.visibility = View.GONE
             }
             scannedView -> {
+                damaged.tag = false
+                damaged.isChecked = manifest.getItem(manifest.top().itemID)?.damaged ?: false
+                damaged.tag = true
+                itemName.text = manifest.top().itemName
+                itemID.text = manifest.top().upc.toString()
                 startView.visibility = View.GONE
                 scannedView.visibility = View.VISIBLE
                 noItemView.visibility = View.GONE
@@ -170,7 +167,7 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        private val scannedItems = ItemList()
-        fun getScannedItems(): ItemList {return scannedItems}
+        private val manifest = ItemList()
+        fun getScannedItems(): ItemList {return manifest}
     }
 }

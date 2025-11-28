@@ -1,13 +1,14 @@
 package ca.unb.mobiledev.appdevproject
 
 import android.content.res.Resources
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter(private val items : ArrayList<ItemList.AggregateItem>) :
+class MyAdapter(private val items : ItemList) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -25,10 +26,17 @@ class MyAdapter(private val items : ArrayList<ItemList.AggregateItem>) :
 
         val item = items.elementAt(position)
 
-        holder.courseIdTextView.text = holder.resources!!.getString(R.string.item_id, item.id)
-        holder.courseNameTextView.text = holder.resources.getString(R.string.item_name, item.id)
-        holder.itemQuantityTextView.text = holder.resources.getString(R.string.quantity, item.count)
-        holder.damagedTextView.text = holder.resources.getString(R.string.num_damaged, item.countDamaged)
+        Log.d("scanned", item.toString())
+
+        holder.courseIdTextView.text = holder.resources!!.getString(R.string.item_id, item.upc)
+        holder.courseNameTextView.text = holder.resources.getString(R.string.item_name, item.upc.toString())
+        holder.itemFlagTextView.text = item.flag
+        if(item.damaged) {
+            holder.damagedTextView.text = holder.resources.getString(R.string.damaged)
+        }
+        else {
+            holder.damagedTextView.text = holder.resources.getString(R.string.not_damaged)
+        }
 
         //holder.itemView.setOnClickListener { listener(course) }
     }
@@ -41,7 +49,7 @@ class MyAdapter(private val items : ArrayList<ItemList.AggregateItem>) :
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val courseIdTextView: TextView = itemView.findViewById(R.id.itemID)
         val courseNameTextView: TextView = itemView.findViewById(R.id.itemName)
-        val itemQuantityTextView: TextView = itemView.findViewById(R.id.quantity)
+        val itemFlagTextView: TextView = itemView.findViewById(R.id.flag)
         val damagedTextView : TextView = itemView.findViewById(R.id.damaged)
         val resources: Resources? = itemView.context.resources
     }

@@ -24,6 +24,6 @@ class ScannedList : AppCompatActivity() {
 
         val scannedItems = MainActivity.getScannedItems()
 
-        scannedRecyclerView.adapter = MyAdapter(scannedItems.getAggregate())
+        scannedRecyclerView.adapter = MyAdapter(scannedItems)
     }
 }

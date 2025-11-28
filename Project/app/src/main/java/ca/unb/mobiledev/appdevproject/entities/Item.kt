@@ -23,7 +23,7 @@ data class Item(
     @ColumnInfo("upc") val upc : Long,
     @ColumnInfo("flag") var flag : String,
     @ColumnInfo("damaged", defaultValue = "0") var damaged : Boolean = false,
-    @ColumnInfo("description") val description : String?
+    @ColumnInfo("description") val description : String? = ""
 )
 
 data class ItemWithName(
