@@ -25,7 +25,7 @@
             android:textColor="@color/forest_green"
             android:textColorHint="#909090"
             android:textSize="20sp"
-            android:background="@drawable/login_field_background"
+            android:background="@drawable/textfield1"
             android:padding="18dp"
             android:inputType="text"
             android:id="@+id/employeeID_input"/>
@@ -38,7 +38,7 @@
             android:textColor="@color/forest_green"
             android:textColorHint="#909090"
             android:textSize="20sp"
-            android:background="@drawable/login_field_background"
+            android:background="@drawable/textfield1"
             android:padding="18dp"
             android:inputType="textPassword"
             android:id="@+id/password_input"/>
