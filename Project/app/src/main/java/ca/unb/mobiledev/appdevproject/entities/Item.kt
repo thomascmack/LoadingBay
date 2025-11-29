@@ -26,11 +26,12 @@ data class Item(
     @ColumnInfo("description") val description : String? = ""
 )
 
-data class ItemWithName(
-    @Embedded val item : Item,
+data class ProductWithItems(
+    @Embedded val
+    product : Product,
     @Relation(
         parentColumn = "upc",
         entityColumn = "upc"
     )
-    val productName: List<ProductName>
+    val items: List<Item>
 )

@@ -30,8 +30,11 @@ class MyAdapter(private val items : ItemList) :
 
         Log.d("scanned", item.toString())
 
-        holder.courseIdTextView.text = holder.resources!!.getString(R.string.item_id, item.upc)
-        holder.courseNameTextView.text = holder.resources.getString(R.string.item_name, item.upc.toString())
+        holder.upcTextView.text = holder.resources!!.getString(R.string.item_id, item.upc)
+
+        //TODO figure out how to get itemName from Product table to use in place of upc here
+        holder.itemNameTextView.text = holder.resources.getString(R.string.item_name, item.upc.toString())
+        
         holder.itemFlagTextView.text = item.flag
         if(item.damaged) {
             holder.damagedTextView.text = holder.resources.getString(R.string.damaged)
@@ -49,8 +52,8 @@ class MyAdapter(private val items : ItemList) :
 
     // Inner ViewHolder Class
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val courseIdTextView: TextView = itemView.findViewById(R.id.itemID)
-        val courseNameTextView: TextView = itemView.findViewById(R.id.itemName)
+        val upcTextView: TextView = itemView.findViewById(R.id.itemID)
+        val itemNameTextView: TextView = itemView.findViewById(R.id.itemName)
         val itemFlagTextView: TextView = itemView.findViewById(R.id.flag)
         val damagedTextView : TextView = itemView.findViewById(R.id.damaged)
         val resources: Resources? = itemView.context.resources
