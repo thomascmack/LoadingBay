@@ -2,9 +2,10 @@ package ca.unb.mobiledev.appdevproject
 
 import ca.unb.mobiledev.appdevproject.entities.Item
 
-class ItemList : ArrayList<Item>() {
-    private var scanStack = ArrayList<ScanData>()
-    private var maxItemID : Long = 0
+
+class ItemList(val shipmentID : Long,
+               var maxItemID : Long,
+               val scanStack: ArrayList<ScanData> = ArrayList()) : ArrayList<Item>() {
 
     fun addItem(itemID : Long, upc : Long, flag : String = "Missing") {
         val item = Item(itemID,1, upc, flag, false, "")

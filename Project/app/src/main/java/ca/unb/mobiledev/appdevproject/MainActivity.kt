@@ -14,7 +14,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import ca.unb.mobiledev.appdevproject.ui.ProductViewModel
+import ca.unb.mobiledev.appdevproject.ui.MyViewModel
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var undoButton : Button
     private lateinit var viewFullList : Button
     private lateinit var scanner : GmsBarcodeScanner
-    private lateinit var productViewModel : ProductViewModel
+    private lateinit var viewModel : MyViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,13 +44,6 @@ class MainActivity : ComponentActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        /* TODO add manifest scanning screen with intent to launch this activity 'manifest' will be
-           included in intent extras*/
-        manifest.addItem(1, 606949304522)
-        manifest.addItem(2, 75678124020)
-        manifest.addItem(3, 777499239876)
-        manifest.addItem(4, 777499239876)
 
         //configure options for qrcode scanner
         val options = GmsBarcodeScannerOptions.Builder()
@@ -89,9 +82,9 @@ class MainActivity : ComponentActivity() {
         }
 
         Log.i("main", "loading view model")
-        productViewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+        viewModel = ViewModelProvider(this)[MyViewModel::class.java]
 
-        productViewModel.searchItems.observe(this) { products ->
+        viewModel.searchItems.observe(this) { products ->
             products?.let {
                 for(p in products) {
                     manifest.scanItem(p.upc, p.itemName)
@@ -124,7 +117,7 @@ class MainActivity : ComponentActivity() {
                 val toast = Toast.makeText(context, id.toString(), duration)
                 toast.show()
 
-                productViewModel.search(id)
+                viewModel.search(id)
             }
             .addOnCanceledListener {
                 val text = "Canceled"
@@ -167,7 +160,7 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        private val manifest = ItemList()
+        private val manifest : ItemList = ManifestScanActivity.getManifest()
         fun getScannedItems(): ItemList {return manifest}
     }
 }
