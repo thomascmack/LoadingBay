@@ -32,4 +32,6 @@
     <string name="scan_manifest_qr_code">Scan Manifest QR Code</string>
     <string name="receivedCount">%d/%d</string>
     <string name="itemID">%d</string>
+    <string name="description">Description</string>
+    <string name="itemDescription">%s</string>
 </resources>

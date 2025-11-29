@@ -42,13 +42,16 @@ class ProductList(val shipmentID : Long,
         return scanStack.isNotEmpty()
     }
 
-    fun setDamage(upc : Long, itemID: Long) {
-        val i = getItem(upc, itemID)
-        i?.damaged = !i.damaged
+    fun setDamage(item: Item?) {
+        item?.let { item.damaged = !item.damaged }
     }
 
-    fun top(): ScanData {
-        return scanStack.last()
+    fun setDescription(item: Item?, description: String) {
+        item?.description = description
+    }
+
+    fun top(): Item? {
+        return getItem(scanStack.last())
     }
 
     fun getItem(upc : Long, itemID : Long) : Item? {
@@ -56,6 +59,15 @@ class ProductList(val shipmentID : Long,
             if(i.itemID == itemID) return i
         }
         return null
+    }
+
+    fun getItem(scanData : ScanData) : Item? {
+        return getItem(scanData.upc, scanData.itemID)
+    }
+
+    fun getItemName(item: Item?) : String? {
+        item?.let {return getProduct(item.upc)?.product?.itemName }
+        return ""
     }
 
     fun getProduct(upc : Long): ProductWithItems? {

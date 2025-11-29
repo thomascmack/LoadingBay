@@ -30,6 +30,7 @@ class ItemListAdapter(private val items : MutableList<Item>) :
         val item = items.elementAt(holder.absoluteAdapterPosition)
 
         holder.itemIDTextView.text = holder.resources?.getString(R.string.itemID, item.itemID)
+        holder.itemDescTextView.text = holder.resources?.getString(R.string.itemDescription, item.description)
 
         Log.d("scanned", item.toString())
     }
@@ -41,6 +42,7 @@ class ItemListAdapter(private val items : MutableList<Item>) :
     // Inner ViewHolder Class
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemIDTextView : TextView = itemView.findViewById(R.id.itemID)
+        val itemDescTextView : TextView = itemView.findViewById(R.id.description)
         val resources: Resources? = itemView.context.resources
     }
 }

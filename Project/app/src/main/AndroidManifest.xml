@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppDevProject">
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.ItemScanActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat" />
         <activity

@@ -51,7 +51,7 @@ class ManifestScanActivity : ComponentActivity() {
                             if(i.itemID > manifest.maxItemID) manifest.maxItemID = i.itemID
                         }
                     }
-                    val intent = Intent(this@ManifestScanActivity, MainActivity::class.java)
+                    val intent = Intent(this@ManifestScanActivity, ItemScanActivity::class.java)
                     startActivity(intent)
                 }
                 else {

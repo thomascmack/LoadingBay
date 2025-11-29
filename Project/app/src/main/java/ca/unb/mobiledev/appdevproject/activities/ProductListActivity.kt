@@ -24,7 +24,7 @@ class ProductListActivity : AppCompatActivity() {
 
         productRecyclerView = findViewById(R.id.productRecyclerView)
 
-        val scannedItems = MainActivity.getScannedItems()
+        val scannedItems = ItemScanActivity.getScannedItems()
 
         productRecyclerView.adapter = ProductListAdapter(scannedItems)
     }

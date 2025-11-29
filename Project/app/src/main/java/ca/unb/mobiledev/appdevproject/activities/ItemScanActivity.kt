@@ -3,10 +3,13 @@ package ca.unb.mobiledev.appdevproject.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -22,7 +25,7 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 
-class MainActivity : ComponentActivity() {
+class ItemScanActivity : ComponentActivity() {
 
     private lateinit var startView : View
     private lateinit var scannedView : View
@@ -33,13 +36,14 @@ class MainActivity : ComponentActivity() {
     private lateinit var scanButton : Button
     private lateinit var undoButton : Button
     private lateinit var viewFullList : Button
+    private lateinit var descExitText : EditText
     private lateinit var scanner : GmsBarcodeScanner
     private lateinit var viewModel : MyViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_item_scan)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -67,19 +71,21 @@ class MainActivity : ComponentActivity() {
         undoButton = findViewById(R.id.undoButton)
         viewFullList = findViewById(R.id.fullList)
 
+        descExitText = findViewById(R.id.description)
+
         scanButton.setOnClickListener {
             scanQRCode(this)
         }
 
         viewFullList.setOnClickListener {
-            val intent = Intent(this@MainActivity, ProductListActivity::class.java)
+            val intent = Intent(this@ItemScanActivity, ProductListActivity::class.java)
             startActivity(intent)
         }
 
         damaged.tag = true
         damaged.setOnCheckedChangeListener { buttonView, isChecked ->
             if(damaged.tag == true) {
-                manifest.setDamage(manifest.top().upc, manifest.top().itemID)
+                manifest.setDamage(manifest.top())
             }
         }
 
@@ -109,6 +115,18 @@ class MainActivity : ComponentActivity() {
                 switchViewTo(startView)
             }
         }
+
+        descExitText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int,
+                                           count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence, start: Int,
+                                       before: Int, count: Int) {
+                manifest.setDescription(manifest.top() ,s.toString()
+                )
+            }
+        })
     }
 
     fun scanQRCode(context : Context) {
@@ -148,10 +166,11 @@ class MainActivity : ComponentActivity() {
             }
             scannedView -> {
                 damaged.tag = false
-                damaged.isChecked = manifest.getItem(manifest.top().upc, manifest.top().itemID)?.damaged ?: false
+                damaged.isChecked = manifest.top()?.damaged ?: false
                 damaged.tag = true
-                itemName.text = manifest.top().itemName
-                itemID.text = manifest.top().upc.toString()
+                descExitText.setText(manifest.top()?.description)
+                itemName.text = manifest.getItemName(manifest.top())
+                itemID.text = manifest.top()?.upc.toString()
                 startView.visibility = View.GONE
                 scannedView.visibility = View.VISIBLE
                 noItemView.visibility = View.GONE

@@ -16,7 +16,7 @@ class LoginActivity : ComponentActivity() {
 
         val loginButton = findViewById<Button>(R.id.login_button)
         loginButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, ItemScanActivity::class.java)
             startActivity(intent)
         }
     }
