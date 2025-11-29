@@ -1,4 +1,4 @@
-package ca.unb.mobiledev.appdevproject
+package ca.unb.mobiledev.appdevproject.adapters
 
 import android.content.res.Resources
 import android.util.Log
@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import ca.unb.mobiledev.appdevproject.R
+import ca.unb.mobiledev.appdevproject.classes.ItemList
 
 class MyAdapter(private val items : ItemList) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {

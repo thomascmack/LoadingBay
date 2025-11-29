@@ -5,7 +5,7 @@
     android:id="@+id/scannedList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ScannedList">
+    tools:context=".activities.ScannedListActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/scannedRecyclerView"

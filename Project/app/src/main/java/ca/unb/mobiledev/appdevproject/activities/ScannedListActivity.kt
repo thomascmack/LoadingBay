@@ -1,4 +1,4 @@
-package ca.unb.mobiledev.appdevproject
+package ca.unb.mobiledev.appdevproject.activities
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
+import ca.unb.mobiledev.appdevproject.adapters.MyAdapter
+import ca.unb.mobiledev.appdevproject.R
 
-class ScannedList : AppCompatActivity() {
+class ScannedListActivity : AppCompatActivity() {
     private lateinit var scannedRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {

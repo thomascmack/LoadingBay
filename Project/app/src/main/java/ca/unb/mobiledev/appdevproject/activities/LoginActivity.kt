@@ -1,10 +1,11 @@
-package ca.unb.mobiledev.appdevproject
+package ca.unb.mobiledev.appdevproject.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
+import ca.unb.mobiledev.appdevproject.R
 
 class LoginActivity : ComponentActivity() {
 

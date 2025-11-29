@@ -1,4 +1,4 @@
-package ca.unb.mobiledev.appdevproject
+package ca.unb.mobiledev.appdevproject.activities
 
 import android.content.Context
 import android.content.Intent
@@ -14,6 +14,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import ca.unb.mobiledev.appdevproject.classes.ItemList
+import ca.unb.mobiledev.appdevproject.R
 import ca.unb.mobiledev.appdevproject.ui.MyViewModel
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
@@ -70,7 +72,7 @@ class MainActivity : ComponentActivity() {
         }
 
         viewFullList.setOnClickListener {
-            val intent = Intent(this@MainActivity, ScannedList::class.java)
+            val intent = Intent(this@MainActivity, ScannedListActivity::class.java)
             startActivity(intent)
         }
 
@@ -86,13 +88,16 @@ class MainActivity : ComponentActivity() {
 
         viewModel.searchItems.observe(this) { products ->
             products?.let {
-                for(p in products) {
-                    manifest.scanItem(p.upc, p.itemName)
+                if(products.isNotEmpty()) {
+                    for (p in products) {
+                        manifest.scanItem(p.upc, p.itemName)
+                    }
+                    switchViewTo(scannedView)
                 }
-                switchViewTo(scannedView)
-                return@observe
+                else {
+                    switchViewTo(noItemView)
+                }
             }
-            switchViewTo(noItemView)
         }
 
         undoButton.setOnClickListener {
