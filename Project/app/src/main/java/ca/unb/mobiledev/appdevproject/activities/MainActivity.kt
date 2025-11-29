@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
         }
 
         viewFullList.setOnClickListener {
-            val intent = Intent(this@MainActivity, ScannedListActivity::class.java)
+            val intent = Intent(this@MainActivity, ProductListActivity::class.java)
             startActivity(intent)
         }
 

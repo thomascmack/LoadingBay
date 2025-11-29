@@ -31,4 +31,5 @@
     <string name="dismiss_error">Dismiss</string>
     <string name="scan_manifest_qr_code">Scan Manifest QR Code</string>
     <string name="receivedCount">%d/%d</string>
+    <string name="itemID">%d</string>
 </resources>

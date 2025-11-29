@@ -6,11 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
-import ca.unb.mobiledev.appdevproject.adapters.MyAdapter
+import ca.unb.mobiledev.appdevproject.adapters.ProductListAdapter
 import ca.unb.mobiledev.appdevproject.R
 
-class ScannedListActivity : AppCompatActivity() {
-    private lateinit var scannedRecyclerView: RecyclerView
+class ProductListActivity : AppCompatActivity() {
+    private lateinit var productRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,10 +22,10 @@ class ScannedListActivity : AppCompatActivity() {
             insets
         }
 
-        scannedRecyclerView = findViewById(R.id.scannedRecyclerView)
+        productRecyclerView = findViewById(R.id.productRecyclerView)
 
         val scannedItems = MainActivity.getScannedItems()
 
-        scannedRecyclerView.adapter = MyAdapter(scannedItems)
+        productRecyclerView.adapter = ProductListAdapter(scannedItems)
     }
 }

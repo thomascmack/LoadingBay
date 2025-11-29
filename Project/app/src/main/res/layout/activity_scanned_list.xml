@@ -5,10 +5,10 @@
     android:id="@+id/scannedList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ScannedListActivity">
+    tools:context=".activities.ProductListActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/scannedRecyclerView"
+        android:id="@+id/productRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"

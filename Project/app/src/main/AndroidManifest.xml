@@ -26,7 +26,7 @@
             android:exported="true"
             android:theme="@style/Theme.AppCompat" />
         <activity
-            android:name=".activities.ScannedListActivity"
+            android:name=".activities.ProductListActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat" />
         <activity

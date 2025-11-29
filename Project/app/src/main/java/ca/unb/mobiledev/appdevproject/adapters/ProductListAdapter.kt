@@ -1,7 +1,6 @@
 package ca.unb.mobiledev.appdevproject.adapters
 
 import android.content.res.Resources
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,14 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 import ca.unb.mobiledev.appdevproject.R
 import ca.unb.mobiledev.appdevproject.classes.ProductList
 
-class MyAdapter(private val products : ProductList) :
-    RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+class ProductListAdapter(private val products : ProductList) :
+    RecyclerView.Adapter<ProductListAdapter.MyViewHolder>() {
+
+        var mExpandedPosition = - 1
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): MyViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.scanned_list_view, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.product_list_view, parent, false)
         return MyViewHolder(view)
     }
 
@@ -25,10 +26,17 @@ class MyAdapter(private val products : ProductList) :
         holder: MyViewHolder,
         position: Int
     ) {
+        val isExpanded = holder.absoluteAdapterPosition == mExpandedPosition
+        holder.itemRecyclerView.visibility = if (isExpanded) View.VISIBLE else View.GONE
+        holder.itemView.isActivated = isExpanded
+        holder.itemView.setOnClickListener {
+            mExpandedPosition = if (isExpanded) -1 else holder.absoluteAdapterPosition
+            notifyItemChanged(holder.absoluteAdapterPosition)
+        }
 
-        val product = products.elementAt(position)
+        val product = products.elementAt(holder.absoluteAdapterPosition)
 
-        Log.d("scanned", product.toString())
+        holder.itemRecyclerView.adapter = ItemListAdapter(product.items)
 
         holder.upcTextView.text = holder.resources!!.getString(R.string.item_id, product.product.upc)
 
@@ -51,5 +59,6 @@ class MyAdapter(private val products : ProductList) :
         val itemsReceivedTextView: TextView = itemView.findViewById(R.id.received)
         val damagedTextView : TextView = itemView.findViewById(R.id.damaged)
         val resources: Resources? = itemView.context.resources
+        val itemRecyclerView : RecyclerView = itemView.findViewById(R.id.itemRecyclerView)
     }
 }
