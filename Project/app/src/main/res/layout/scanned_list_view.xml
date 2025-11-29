@@ -17,10 +17,10 @@
     <TextView
         android:layout_width="100dp"
         android:layout_below="@+id/itemID"
-        android:id="@+id/flag"
+        android:id="@+id/received"
         android:textSize="20sp"
         android:layout_marginStart="20dp"
-        android:text="@string/flag"
+        android:text="@string/receivedCount"
         android:layout_marginEnd="20dp"
         android:maxLines="1"
         android:layout_marginTop="15dp"
@@ -32,9 +32,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/itemID"
         android:layout_marginTop="15dp"
-        android:layout_toEndOf="@+id/flag"
+        android:layout_toEndOf="@+id/received"
         android:maxLines="1"
-        android:text="@string/not_damaged"
+        android:text="@string/damaged"
         android:textSize="18sp" />
 
 

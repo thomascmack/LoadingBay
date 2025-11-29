@@ -14,8 +14,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import ca.unb.mobiledev.appdevproject.classes.ItemList
 import ca.unb.mobiledev.appdevproject.R
+import ca.unb.mobiledev.appdevproject.classes.ProductList
 import ca.unb.mobiledev.appdevproject.ui.MyViewModel
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
         damaged.tag = true
         damaged.setOnCheckedChangeListener { buttonView, isChecked ->
             if(damaged.tag == true) {
-                manifest.setDamage(manifest.top().itemID)
+                manifest.setDamage(manifest.top().upc, manifest.top().itemID)
             }
         }
 
@@ -148,7 +148,7 @@ class MainActivity : ComponentActivity() {
             }
             scannedView -> {
                 damaged.tag = false
-                damaged.isChecked = manifest.getItem(manifest.top().itemID)?.damaged ?: false
+                damaged.isChecked = manifest.getItem(manifest.top().upc, manifest.top().itemID)?.damaged ?: false
                 damaged.tag = true
                 itemName.text = manifest.top().itemName
                 itemID.text = manifest.top().upc.toString()
@@ -165,7 +165,7 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        private val manifest : ItemList = ManifestScanActivity.getManifest()
-        fun getScannedItems(): ItemList {return manifest}
+        private val manifest : ProductList = ManifestScanActivity.getManifest()
+        fun getScannedItems(): ProductList {return manifest}
     }
 }

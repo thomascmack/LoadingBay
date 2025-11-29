@@ -8,8 +8,8 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModelProvider
-import ca.unb.mobiledev.appdevproject.classes.ItemList
 import ca.unb.mobiledev.appdevproject.R
+import ca.unb.mobiledev.appdevproject.classes.ProductList
 import ca.unb.mobiledev.appdevproject.ui.MyViewModel
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
@@ -40,15 +40,16 @@ class ManifestScanActivity : ComponentActivity() {
 
         viewModel = ViewModelProvider(this)[MyViewModel::class.java]
 
-        viewModel.manifestSearch.observe(this) { items ->
-            Log.d("items", "$items")
-            items?.let {
-                if(items.isNotEmpty()) {
-                    manifest = ItemList(items[0].shipmentID, 0)
-                    Log.d("Manifest", "manifest initialized")
-                    for (i in items) {
-                        manifest.addItem(i.itemID, i.upc)
-                        if (i.itemID > manifest.maxItemID) manifest.maxItemID = i.itemID
+        viewModel.manifestSearch.observe(this) { pWi ->
+            pWi?.let {
+                if(pWi.isNotEmpty()) {
+                    manifest = ProductList(pWi[0].items[0].shipmentID, 0)
+                    for(p in pWi) {
+                        Log.d("Shipment", p.toString())
+                        manifest.add(p)
+                        for(i in p.items) {
+                            if(i.itemID > manifest.maxItemID) manifest.maxItemID = i.itemID
+                        }
                     }
                     val intent = Intent(this@ManifestScanActivity, MainActivity::class.java)
                     startActivity(intent)
@@ -89,7 +90,7 @@ class ManifestScanActivity : ComponentActivity() {
     }
 
     companion object {
-        private lateinit var manifest : ItemList
-        fun getManifest(): ItemList {return manifest}
+        private lateinit var manifest : ProductList
+        fun getManifest(): ProductList {return manifest}
     }
 }

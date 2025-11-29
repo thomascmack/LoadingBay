@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ca.unb.mobiledev.appdevproject.R
-import ca.unb.mobiledev.appdevproject.classes.ItemList
+import ca.unb.mobiledev.appdevproject.classes.ProductList
 
-class MyAdapter(private val items : ItemList) :
+class MyAdapter(private val products : ProductList) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -26,35 +26,29 @@ class MyAdapter(private val items : ItemList) :
         position: Int
     ) {
 
-        val item = items.elementAt(position)
+        val product = products.elementAt(position)
 
-        Log.d("scanned", item.toString())
+        Log.d("scanned", product.toString())
 
-        holder.upcTextView.text = holder.resources!!.getString(R.string.item_id, item.upc)
+        holder.upcTextView.text = holder.resources!!.getString(R.string.item_id, product.product.upc)
 
-        //TODO figure out how to get itemName from Product table to use in place of upc here
-        holder.itemNameTextView.text = holder.resources.getString(R.string.item_name, item.upc.toString())
-        
-        holder.itemFlagTextView.text = item.flag
-        if(item.damaged) {
-            holder.damagedTextView.text = holder.resources.getString(R.string.damaged)
-        }
-        else {
-            holder.damagedTextView.text = holder.resources.getString(R.string.not_damaged)
-        }
+        holder.itemNameTextView.text = holder.resources.getString(R.string.item_name, product.product.itemName)
 
+        holder.itemsReceivedTextView.text = holder.resources.getString(R.string.receivedCount, products.countReceived(product.product.upc), products.countExpected(product.product.upc))
+
+        holder.damagedTextView.text = holder.resources.getString(R.string.damaged, products.countDamaged(product.product.upc))
         //holder.itemView.setOnClickListener { listener(course) }
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return products.size
     }
 
     // Inner ViewHolder Class
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val upcTextView: TextView = itemView.findViewById(R.id.itemID)
         val itemNameTextView: TextView = itemView.findViewById(R.id.itemName)
-        val itemFlagTextView: TextView = itemView.findViewById(R.id.flag)
+        val itemsReceivedTextView: TextView = itemView.findViewById(R.id.received)
         val damagedTextView : TextView = itemView.findViewById(R.id.damaged)
         val resources: Resources? = itemView.context.resources
     }

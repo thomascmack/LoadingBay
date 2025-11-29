@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import ca.unb.mobiledev.appdevproject.db.AppDatabase
-import ca.unb.mobiledev.appdevproject.entities.Item
+import ca.unb.mobiledev.appdevproject.entities.ProductWithItems
 import ca.unb.mobiledev.appdevproject.entities.Product
 import ca.unb.mobiledev.appdevproject.repositories.MyRepository
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +17,7 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     // Expose the search results
     //  NOTE: This variable will be observed for change in the main activity
     val searchItems = MutableLiveData<List<Product>>()
-    val manifestSearch = MutableLiveData<List<Item>>()
+    val manifestSearch = MutableLiveData<List<ProductWithItems>>()
 
     init {
         val pDao = AppDatabase.getDatabase(application, viewModelScope).ProductDao()

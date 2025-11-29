@@ -33,5 +33,5 @@ data class ProductWithItems(
         parentColumn = "upc",
         entityColumn = "upc"
     )
-    val items: List<Item>
+    val items: MutableList<Item>
 )
