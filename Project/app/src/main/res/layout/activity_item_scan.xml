@@ -135,7 +135,7 @@
             android:layout_marginStart="0dp"
             android:textSize="20sp"
             android:textAllCaps="false"
-            android:id="@+id/scanButton"/>
+            android:id="@+id/manualButton"/>
 
 
     </LinearLayout>

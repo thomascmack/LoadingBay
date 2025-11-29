@@ -1,24 +1,31 @@
-package ca.unb.mobiledev.appdevproject
+package ca.unb.mobiledev.appdevproject.activities
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
+import ca.unb.mobiledev.appdevproject.R
+import ca.unb.mobiledev.appdevproject.classes.ProductList
+import ca.unb.mobiledev.appdevproject.ui.MyViewModel
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 
-
-class MainActivity : ComponentActivity() {
+class ItemScanActivity : ComponentActivity() {
 
     private lateinit var startView : View
     private lateinit var scannedView : View
@@ -29,12 +36,14 @@ class MainActivity : ComponentActivity() {
     private lateinit var scanButton : Button
     private lateinit var undoButton : Button
     private lateinit var viewFullList : Button
+    private lateinit var descExitText : EditText
     private lateinit var scanner : GmsBarcodeScanner
+    private lateinit var viewModel : MyViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_item_scan)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -62,9 +71,44 @@ class MainActivity : ComponentActivity() {
         undoButton = findViewById(R.id.undoButton)
         viewFullList = findViewById(R.id.fullList)
 
+        descExitText = findViewById(R.id.description)
+
+        scanButton.setOnClickListener {
+            scanQRCode(this)
+        }
+
+        viewFullList.setOnClickListener {
+            val intent = Intent(this@ItemScanActivity, ProductListActivity::class.java)
+            startActivity(intent)
+        }
+
+        damaged.tag = true
+        damaged.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(damaged.tag == true) {
+                manifest.setDamage(manifest.top())
+            }
+        }
+
+        Log.i("main", "loading view model")
+        viewModel = ViewModelProvider(this)[MyViewModel::class.java]
+
+        viewModel.searchItems.observe(this) { products ->
+            products?.let {
+                if(products.isNotEmpty()) {
+                    for (p in products) {
+                        manifest.scanItem(p.upc, p.itemName)
+                    }
+                    switchViewTo(scannedView)
+                }
+                else {
+                    switchViewTo(noItemView)
+                }
+            }
+        }
+
         undoButton.setOnClickListener {
-            scannedItems.pop()
-            if(getScannedItems().isNotEmpty()) {
+            manifest.undo()
+            if(manifest.isNotEmpty()) {
                 switchViewTo(scannedView)
             }
             else {
@@ -72,21 +116,17 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        scanButton.setOnClickListener {
-            scanQRCode(this)
-        }
-
-        viewFullList.setOnClickListener {
-            val intent = Intent(this@MainActivity, ScannedList::class.java)
-            startActivity(intent)
-        }
-
-        damaged.tag = true
-        damaged.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(scannedItems.isNotEmpty() && damaged.tag == true) {
-                scannedItems.setDamage(scannedItems.top())
+        descExitText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int,
+                                           count: Int, after: Int) {
             }
-        }
+            override fun onTextChanged(s: CharSequence, start: Int,
+                                       before: Int, count: Int) {
+                manifest.setDescription(manifest.top() ,s.toString()
+                )
+            }
+        })
     }
 
     fun scanQRCode(context : Context) {
@@ -100,13 +140,7 @@ class MainActivity : ComponentActivity() {
                 val toast = Toast.makeText(context, id.toString(), duration)
                 toast.show()
 
-                if(inv.containsKey(id)) {
-                    scannedItems.push(id, inv.getValue(id))
-                    switchViewTo(scannedView)
-                }
-                else {
-                    switchViewTo(noItemView)
-                }
+                viewModel.search(id)
             }
             .addOnCanceledListener {
                 val text = "Canceled"
@@ -131,7 +165,12 @@ class MainActivity : ComponentActivity() {
                 noItemView.visibility = View.GONE
             }
             scannedView -> {
-                updateScannedView()
+                damaged.tag = false
+                damaged.isChecked = manifest.top()?.damaged ?: false
+                damaged.tag = true
+                descExitText.setText(manifest.top()?.description)
+                itemName.text = manifest.getItemName(manifest.top())
+                itemID.text = manifest.top()?.upc.toString()
                 startView.visibility = View.GONE
                 scannedView.visibility = View.VISIBLE
                 noItemView.visibility = View.GONE
@@ -144,24 +183,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun updateScannedView() {
-        if (getScannedItems().isNotEmpty()) {
-            damaged.tag = false
-            damaged.isChecked = scannedItems.top().damaged
-            damaged.tag = true
-            val i = scannedItems.top()
-            itemName.text = i.name
-            itemID.text = i.id.toString()
-        }
-    }
-
-
     companion object {
-        private val scannedItems = ItemList()
-        private val inv = mapOf(777499239876 to "CD - Neil Young Decade",
-                                75678124020 to "CD - Phil Collins No Jacket Required",
-                                606949304522 to "CD - Weezer Green Album")
-
-        fun getScannedItems(): ItemList {return scannedItems}
+        private val manifest : ProductList = ManifestScanActivity.getManifest()
+        fun getScannedItems(): ProductList {return manifest}
     }
 }

@@ -1,4 +1,4 @@
-package ca.unb.mobiledev.appdevproject
+package ca.unb.mobiledev.appdevproject.activities
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
+import ca.unb.mobiledev.appdevproject.adapters.ProductListAdapter
+import ca.unb.mobiledev.appdevproject.R
 
-class ScannedList : AppCompatActivity() {
-    private lateinit var scannedRecyclerView: RecyclerView
+class ProductListActivity : AppCompatActivity() {
+    private lateinit var productRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,10 +22,10 @@ class ScannedList : AppCompatActivity() {
             insets
         }
 
-        scannedRecyclerView = findViewById(R.id.scannedRecyclerView)
+        productRecyclerView = findViewById(R.id.productRecyclerView)
 
-        val scannedItems = MainActivity.getScannedItems()
+        val scannedItems = ItemScanActivity.getScannedItems()
 
-        scannedRecyclerView.adapter = MyAdapter(scannedItems.getAggregate())
+        productRecyclerView.adapter = ProductListAdapter(scannedItems)
     }
 }
