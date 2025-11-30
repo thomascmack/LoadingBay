@@ -84,11 +84,8 @@ class ItemScanActivity : ComponentActivity() {
             val dialog = Dialog(this, R.style.DialogWindowTheme)
             dialog.setContentView(R.layout.enter_product_id_dialog)
             dialog.show()
-
-            var finishProductIDButton : Button
-            var cancelProductIDButton : Button
-            finishProductIDButton = dialog.findViewById(R.id.finishButton)
-            cancelProductIDButton = dialog.findViewById(R.id.cancelButton)
+            val finishProductIDButton : Button = dialog.findViewById(R.id.finishButton)
+            val cancelProductIDButton : Button = dialog.findViewById(R.id.cancelButton)
 
 
             finishProductIDButton.setOnClickListener {
