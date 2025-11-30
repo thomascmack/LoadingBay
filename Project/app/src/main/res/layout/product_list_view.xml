@@ -2,68 +2,79 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:id="@+id/itemName"
-        android:textSize="20sp"
-        android:layout_marginStart="20dp"
-        android:text="@string/item_name"
-        android:layout_marginEnd="20dp"
-        android:maxLines="1"
-        android:layout_marginTop="15dp"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:layout_width="100dp"
-        android:layout_below="@+id/itemID"
-        android:id="@+id/received"
-        android:textSize="20sp"
-        android:layout_marginStart="20dp"
-        android:text="@string/receivedCount"
-        android:layout_marginEnd="20dp"
-        android:maxLines="1"
-        android:layout_marginTop="15dp"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/damaged"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/itemID"
-        android:layout_marginTop="15dp"
-        android:layout_toEndOf="@+id/received"
-        android:maxLines="1"
-        android:text="@string/count_damaged"
-        android:textSize="18sp" />
-
-
-
-    <TextView
-        android:id="@+id/itemID"
-        android:layout_below="@+id/itemName"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-        android:text="@string/item_id"
-        android:textSize="16sp"/>
-
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topTag"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_alignParentBottom="true"
-        android:background="#808080"/>
+        android:layout_height="113dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/itemName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:maxLines="1"
+                android:text="@string/item_name"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/received"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/itemID"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:maxLines="1"
+                android:text="@string/receivedCount"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/damaged"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/itemID"
+                android:layout_marginTop="15dp"
+                android:layout_toEndOf="@+id/received"
+                android:maxLines="1"
+                android:text="@string/count_damaged"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/itemID"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/itemName"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="20dp"
+                android:text="@string/item_id"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="#808080" />
+        </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/itemRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="0dp"
-        android:layout_below="@id/received"
+        android:layout_below="@id/topTag"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 </RelativeLayout>

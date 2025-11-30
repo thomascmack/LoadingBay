@@ -144,7 +144,7 @@
             android:padding="18dp"
             android:text="Enter Code Manually"
             android:textAllCaps="false"
-            android:textColor="@color/forest_green"
+            android:textColor="@color/green"
             android:textSize="20sp" />
     </LinearLayout>
 

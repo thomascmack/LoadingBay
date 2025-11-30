@@ -23,7 +23,7 @@
             android:layout_margin="10dp"
             android:text="@string/manual_manifest_id_entry"
             android:textAllCaps="false"
-            android:textColor="@color/forest_green"
+            android:textColor="@color/green"
             android:textSize="20sp"
             android:layout_alignParentBottom="true" />
 

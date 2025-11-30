@@ -59,13 +59,16 @@ class ItemListAdapter(val productList : ProductList, upc : Long, val parentAdapt
 
         if(item.flag != "Missing") {
             holder.deleteButton.visibility = View.VISIBLE
+            holder.item.setBackgroundColor(holder.resources!!.getColor(R.color.light_green))
         }
         else {
             holder.deleteButton.visibility = View.GONE
+            holder.item.setBackgroundColor(holder.resources!!.getColor(R.color.off_white))
         }
 
         if(item.damaged) {
             holder.itemDamagedTextView.visibility = View.VISIBLE
+            holder.item.setBackgroundColor(holder.resources!!.getColor(R.color.light_orange))
         }
         else {
             holder.itemDamagedTextView.visibility = View.GONE
@@ -80,5 +83,6 @@ class ItemListAdapter(val productList : ProductList, upc : Long, val parentAdapt
         val itemDamagedTextView : TextView = itemView.findViewById(R.id.damaged)
         val deleteButton : Button = itemView.findViewById(R.id.deleteButton)
         val resources: Resources? = itemView.context.resources
+        val item: View = itemView.findViewById(R.id.item)
     }
 }

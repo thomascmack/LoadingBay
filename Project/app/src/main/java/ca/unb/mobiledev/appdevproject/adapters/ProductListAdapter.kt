@@ -45,6 +45,24 @@ class ProductListAdapter(private val products : ProductList) :
         holder.itemsReceivedTextView.text = holder.resources.getString(R.string.receivedCount, products.countReceived(product.product.upc), products.countExpected(product.product.upc))
 
         holder.damagedTextView.text = holder.resources.getString(R.string.count_damaged, products.countDamaged(product.product.upc))
+
+        val expected = products.countExpected(product.product.upc)
+        val received = products.countReceived(product.product.upc)
+
+        if (expected == received) {
+            holder.topTag.setBackgroundColor(holder.resources.getColor(R.color.green))
+            //holder.topTag.background = holder.resources.getDrawable(R.drawable.product_received)
+        }
+        else if (expected > received) {
+            holder.topTag.setBackgroundColor(holder.resources.getColor(R.color.dark_grey))
+            //holder.topTag.background = holder.resources.getDrawable(R.drawable.product_missing)
+        }
+        else {
+            holder.topTag.setBackgroundColor(holder.resources.getColor(R.color.purple))
+            //holder.topTag.background = holder.resources.getDrawable(R.drawable.product_extra)
+        }
+
+
     }
 
     override fun getItemCount(): Int {
@@ -59,5 +77,8 @@ class ProductListAdapter(private val products : ProductList) :
         val damagedTextView : TextView = itemView.findViewById(R.id.damaged)
         val resources: Resources? = itemView.context.resources
         val itemRecyclerView : RecyclerView = itemView.findViewById(R.id.itemRecyclerView)
+
+        val topTag : View = itemView.findViewById(R.id.topTag)
+
     }
 }

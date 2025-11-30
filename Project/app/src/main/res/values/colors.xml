@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFFFFFFF</color>
-
-    <color name="forest_green">#067429</color>
-    <color name="dark_grey">#505050</color>
+    <color name="off_white">#E7E7E7</color>
+    <color name="dark_grey">#595959</color>
     <color name="light_grey">#808080</color>
+
+    <color name="light_green">#ADF0C7</color>
+    <color name="green">#067429</color>
+    <color name="dark_green">#065720</color>
+
     <color name="red">#BD0A0A</color>
+
+    <color name="light_purple">#DEDAFF</color>
+    <color name="purple">#8F7FEE</color>
+    <color name="dark_purple">#6631D7</color>
+
+    <color name="light_orange">#F8D3AF</color>
+    <color name="orange">#FE9F4D</color>
+    <color name="dark_orange">#9B4A08</color>
 
 </resources>
