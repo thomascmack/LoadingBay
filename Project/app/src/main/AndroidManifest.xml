@@ -22,6 +22,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppDevProject">
         <activity
+            android:name=".activities.ItemEditActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ItemScanActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat" />
@@ -39,6 +42,7 @@
             android:theme="@style/Theme.AppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
