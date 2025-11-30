@@ -1,10 +1,12 @@
 package ca.unb.mobiledev.appdevproject.activities
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +22,7 @@ class ManifestScanActivity : ComponentActivity() {
 
     private lateinit var scanner : GmsBarcodeScanner
     private lateinit var scanButton : Button
+    private lateinit var scanManualButton : Button
     private lateinit var viewModel : MyViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,9 +36,34 @@ class ManifestScanActivity : ComponentActivity() {
         scanner = GmsBarcodeScanning.getClient(this, options)
 
         scanButton = findViewById(R.id.QRscanButton)
+        scanManualButton = findViewById(R.id.manualButton)
+
 
         scanButton.setOnClickListener {
             scanQRCode(this)
+        }
+
+        scanManualButton.setOnClickListener {
+            val dialog = Dialog(this, R.style.DialogWindowTheme)
+            dialog.setContentView(R.layout.enter_shippment_id_dialog)
+            dialog.show()
+
+            val finishProductIDButton : Button = dialog.findViewById(R.id.confirmButton)
+            val cancelProductIDButton : Button = dialog.findViewById(R.id.cancelButton)
+
+
+            finishProductIDButton.setOnClickListener {
+                val id =  dialog.findViewById<EditText>(R.id.shipmentID).text.toString()
+                if(id.isNotEmpty()) {
+                    viewModel.findManifest(id.toLong())
+                    dialog.dismiss()
+                }
+                else Toast.makeText(this, "Please enter a shipment ID", Toast.LENGTH_SHORT).show()
+            }
+
+            cancelProductIDButton.setOnClickListener {
+                dialog.cancel()
+            }
         }
 
         viewModel = ViewModelProvider(this)[MyViewModel::class.java]

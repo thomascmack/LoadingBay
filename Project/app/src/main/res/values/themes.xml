@@ -2,4 +2,9 @@
 <resources>
 
     <style name="Theme.AppDevProject" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="DialogWindowTheme" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+    </style>
 </resources>

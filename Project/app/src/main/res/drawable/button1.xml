@@ -11,8 +11,8 @@
 <!--                android:bottomRightRadius="300dp"-->
 <!--            <gradient android:startColor="@color/purple_200"-->
 <!--                android:endColor="@color/teal_200"/>-->
-            <stroke android:width="2dp"
-                android:color="@color/white"/> <!--border width-->
+
+
         </shape>
     </item>
 
