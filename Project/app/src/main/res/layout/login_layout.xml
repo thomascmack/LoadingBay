@@ -27,8 +27,7 @@
             android:textSize="20sp"
             android:background="@drawable/textfield1"
             android:padding="18dp"
-            android:inputType="text"
-            android:id="@+id/employeeID_input"/>
+            android:inputType="text" />
 
         <EditText
             android:layout_width="match_parent"
@@ -40,8 +39,7 @@
             android:textSize="20sp"
             android:background="@drawable/textfield1"
             android:padding="18dp"
-            android:inputType="textPassword"
-            android:id="@+id/password_input"/>
+            android:inputType="textPassword" />
 
         <Button
             android:layout_width="match_parent"
@@ -65,8 +63,7 @@
             android:padding="18dp"
             android:layout_marginTop="8dp"
             android:textSize="20sp"
-            android:textAllCaps="false"
-            android:id="@+id/forgotPassword_button"/>
+            android:textAllCaps="false" />
 
 
     </LinearLayout>
