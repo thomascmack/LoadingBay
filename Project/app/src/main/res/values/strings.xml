@@ -38,6 +38,7 @@
     <string name="error_fragment_message">An error occurred</string>
     <string name="dismiss_error">Dismiss</string>
     <string name="scan_manifest_qr_code">Scan Manifest QR Code</string>
+    <string name="manual_manifest_id_entry">Enter Manifest ID manually</string>
     <string name="receivedCount">%d/%d</string>
     <string name="itemID">%d</string>
     <string name="description">Description</string>
