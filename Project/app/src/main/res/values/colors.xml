@@ -11,6 +11,7 @@
     <color name="forest_green">#008000</color>
     <color name="dark_grey">#505050</color>
     <color name="light_grey">#808080</color>
+    <color name="red">#FFBD0A0A</color>
 
     <color name="background_gradient_start">#000000</color>
     <color name="background_gradient_end">#DDDDDD</color>

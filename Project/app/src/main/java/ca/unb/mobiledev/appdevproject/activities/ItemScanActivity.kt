@@ -1,5 +1,6 @@
 package ca.unb.mobiledev.appdevproject.activities
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -34,6 +35,7 @@ class ItemScanActivity : ComponentActivity() {
     private lateinit var itemID : TextView
     private lateinit var damaged : CheckBox
     private lateinit var scanButton : Button
+    private lateinit var scanManualButton : Button
     private lateinit var undoButton : Button
     private lateinit var viewFullList : Button
     private lateinit var descExitText : EditText
@@ -68,6 +70,7 @@ class ItemScanActivity : ComponentActivity() {
         damaged = findViewById(R.id.damaged)
 
         scanButton = findViewById(R.id.scanButton)
+        scanManualButton = findViewById(R.id.manualButton)
         undoButton = findViewById(R.id.undoButton)
         viewFullList = findViewById(R.id.fullList)
 
@@ -75,6 +78,31 @@ class ItemScanActivity : ComponentActivity() {
 
         scanButton.setOnClickListener {
             scanQRCode(this)
+        }
+
+        scanManualButton.setOnClickListener {
+            val dialog = Dialog(this, R.style.DialogWindowTheme)
+            dialog.setContentView(R.layout.enter_product_id_dialog)
+            dialog.show()
+
+            var finishProductIDButton : Button
+            var cancelProductIDButton : Button
+            finishProductIDButton = dialog.findViewById(R.id.finishButton)
+            cancelProductIDButton = dialog.findViewById(R.id.cancelButton)
+
+
+            finishProductIDButton.setOnClickListener {
+                val upc =  dialog.findViewById<EditText>(R.id.productCode).text.toString()
+                if(upc.isNotEmpty()) {
+                    viewModel.search(upc.toLong())
+                }
+                else Toast.makeText(this, "Please enter a product code", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+
+            cancelProductIDButton.setOnClickListener {
+                dialog.cancel()
+            }
         }
 
         viewFullList.setOnClickListener {
