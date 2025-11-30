@@ -37,6 +37,7 @@ class ItemScanActivity : ComponentActivity() {
     private lateinit var damaged : CheckBox
     private lateinit var scanButton : Button
     private lateinit var scanManualButton : Button
+    private lateinit var closeButton : Button
     private lateinit var undoButton : Button
     private lateinit var viewFullList : Button
     private lateinit var descExitText : EditText
@@ -70,17 +71,19 @@ class ItemScanActivity : ComponentActivity() {
         itemID = findViewById(R.id.itemID)
         damaged = findViewById(R.id.damaged)
 
-        scanButton = findViewById(R.id.scanButton)
-        scanManualButton = findViewById(R.id.manualButton)
         undoButton = findViewById(R.id.undoButton)
         viewFullList = findViewById(R.id.fullList)
 
         descExitText = findViewById(R.id.description)
 
+        // Scan button click listener
+        scanButton = findViewById(R.id.scanButton)
         scanButton.setOnClickListener {
             scanQRCode(this)
         }
 
+        // Manual button click listener
+        scanManualButton = findViewById(R.id.manualButton)
         scanManualButton.setOnClickListener {
             val dialog = Dialog(this, R.style.DialogWindowTheme)
             dialog.setContentView(R.layout.enter_product_id_dialog)
@@ -102,6 +105,26 @@ class ItemScanActivity : ComponentActivity() {
                 dialog.cancel()
             }
         }
+
+        //Cancel button click listener
+        closeButton = findViewById(R.id.cancelButton)
+        closeButton.setOnClickListener {
+            val dialog = Dialog(this, R.style.DialogWindowTheme)
+            dialog.setContentView(R.layout.end_shipment_scan_dialog)
+            dialog.show()
+            val confirmButton : Button = dialog.findViewById(R.id.confirmButton)
+            val backButton : Button = dialog.findViewById(R.id.backButton)
+
+            confirmButton.setOnClickListener {
+                dialog.cancel()
+                finish()
+            }
+
+            backButton.setOnClickListener {
+                dialog.cancel()
+            }
+        }
+
 
         viewFullList.setOnClickListener {
             val intent = Intent(this@ItemScanActivity, ProductListActivity::class.java)
