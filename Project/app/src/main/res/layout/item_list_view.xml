@@ -57,6 +57,14 @@
         android:layout_height="wrap_content"
         android:text="@string/delete"
         android:layout_below="@+id/itemName"
+        android:layout_toEndOf="@id/editButton"/>
+
+    <Button
+        android:id="@+id/editButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit"
+        android:layout_below="@+id/itemName"
         android:layout_toEndOf="@id/flag"/>
 
 </RelativeLayout>

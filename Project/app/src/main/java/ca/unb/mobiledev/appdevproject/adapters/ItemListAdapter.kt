@@ -11,7 +11,7 @@ import ca.unb.mobiledev.appdevproject.R
 import ca.unb.mobiledev.appdevproject.classes.ProductList
 import ca.unb.mobiledev.appdevproject.entities.Item
 
-class ItemListAdapter(val productList : ProductList, upc : Long, val ParentAdapter : ProductListAdapter) :
+class ItemListAdapter(val productList : ProductList, upc : Long, val parentAdapter : ProductListAdapter) :
     RecyclerView.Adapter<ItemListAdapter.MyViewHolder>() {
 
         var items = productList.getProduct(upc)?.items ?: mutableListOf()
@@ -44,7 +44,7 @@ class ItemListAdapter(val productList : ProductList, upc : Long, val ParentAdapt
         holder.deleteButton.setOnClickListener {
             productList.removeItem(holder.absoluteAdapterPosition, items)
             notifyDataSetChanged()
-            ParentAdapter.notifyDataSetChanged()
+            parentAdapter.notifyDataSetChanged()
         }
     }
 
