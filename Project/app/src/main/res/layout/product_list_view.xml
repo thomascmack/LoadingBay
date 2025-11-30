@@ -35,7 +35,7 @@
         android:layout_marginTop="15dp"
         android:layout_toEndOf="@+id/received"
         android:maxLines="1"
-        android:text="@string/damaged"
+        android:text="@string/count_damaged"
         android:textSize="18sp" />
 
 

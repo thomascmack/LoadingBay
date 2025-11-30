@@ -90,20 +90,52 @@ class ProductList(val shipmentID : Long,
         scanStack.add(ScanData(upc, itemName, maxItemID))
     }
 
+    fun removeItem(pos : Int, items : MutableList<Item>) {
+        if(items[pos].flag == "Extra") {
+            removeFromStack(items[pos].itemID)
+            items.removeAt(pos)
+        }
+        else {
+            for(i in items.subList(pos, items.size)) {
+                if (i.flag == "Extra") {
+                    items[pos].damaged = false
+                    items[pos].description = ""
+                    removeFromStack(i.itemID)
+                    items.remove(i)
+                    return
+                }
+            }
+            removeFromStack(items[pos].itemID)
+            items[pos].flag = "Missing"
+            items[pos].damaged = false
+            items[pos].description = ""
+        }
+    }
+
     fun removeItem(itemID : Long, items : MutableList<Item>) {
-        Log.d("items", "removing $itemID")
         for(i in items) {
-            if(i.itemID == itemID && i.flag != "Missing") {
-                Log.d("items", "found item")
+            if(i.itemID == itemID) {
                 if(i.flag == "Extra") {
                     items.remove(i)
+                    return
                 }
                 else {
                     i.flag = "Missing"
+                    i.damaged = false
+                    i.description = ""
+                    return
                 }
             }
         }
-        Log.d("Items", items.toString())
+    }
+
+    fun removeFromStack(itemID: Long) {
+        for(s in scanStack) {
+            if(s.itemID == itemID) {
+                scanStack.remove(s)
+                return
+            }
+        }
     }
 
     fun countTotal(upc : Long) : Int {

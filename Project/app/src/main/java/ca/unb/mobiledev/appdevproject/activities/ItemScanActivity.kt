@@ -154,6 +154,17 @@ class ItemScanActivity : ComponentActivity() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d("ItemScan", "activity re-entered")
+        if(manifest.isNotEmpty()) {
+            switchViewTo(scannedView)
+        }
+        else {
+            switchViewTo(startView)
+        }
+    }
+
     fun scanQRCode(context : Context) {
         //start scan and handle results
         scanner.startScan()

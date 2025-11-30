@@ -1,17 +1,21 @@
 package ca.unb.mobiledev.appdevproject.adapters
 
 import android.content.res.Resources
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ca.unb.mobiledev.appdevproject.R
+import ca.unb.mobiledev.appdevproject.classes.ProductList
 import ca.unb.mobiledev.appdevproject.entities.Item
 
-class ItemListAdapter(private val items : MutableList<Item>) :
+class ItemListAdapter(val productList : ProductList, upc : Long, val ParentAdapter : ProductListAdapter) :
     RecyclerView.Adapter<ItemListAdapter.MyViewHolder>() {
+
+        var items = productList.getProduct(upc)?.items ?: mutableListOf()
+    lateinit var mRecyclerView : RecyclerView
 
 
     override fun onCreateViewHolder(
@@ -22,6 +26,12 @@ class ItemListAdapter(private val items : MutableList<Item>) :
         return MyViewHolder(view)
     }
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+
+        mRecyclerView = recyclerView
+    }
+
     override fun onBindViewHolder(
         holder: MyViewHolder,
         position: Int
@@ -29,20 +39,46 @@ class ItemListAdapter(private val items : MutableList<Item>) :
 
         val item = items.elementAt(holder.absoluteAdapterPosition)
 
-        holder.itemIDTextView.text = holder.resources?.getString(R.string.itemID, item.itemID)
-        holder.itemDescTextView.text = holder.resources?.getString(R.string.itemDescription, item.description)
+        updateView(item, holder)
 
-        Log.d("scanned", item.toString())
+        holder.deleteButton.setOnClickListener {
+            productList.removeItem(holder.absoluteAdapterPosition, items)
+            notifyDataSetChanged()
+            ParentAdapter.notifyDataSetChanged()
+        }
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
+    fun updateView(item : Item, holder : MyViewHolder) {
+        holder.itemNameTextView.text = holder.resources?.getString(R.string.item_name, productList.getItemName(item))
+        holder.itemFlagTextView.text = holder.resources?.getString(R.string.flag, item.flag)
+        holder.itemDescTextView.text = holder.resources?.getString(R.string.itemDescription, item.description)
+
+        if(item.flag != "Missing") {
+            holder.deleteButton.visibility = View.VISIBLE
+        }
+        else {
+            holder.deleteButton.visibility = View.GONE
+        }
+
+        if(item.damaged) {
+            holder.itemDamagedTextView.visibility = View.VISIBLE
+        }
+        else {
+            holder.itemDamagedTextView.visibility = View.GONE
+        }
+    }
+
     // Inner ViewHolder Class
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val itemIDTextView : TextView = itemView.findViewById(R.id.itemID)
+        val itemNameTextView : TextView = itemView.findViewById(R.id.itemName)
+        val itemFlagTextView : TextView = itemView.findViewById(R.id.flag)
         val itemDescTextView : TextView = itemView.findViewById(R.id.description)
+        val itemDamagedTextView : TextView = itemView.findViewById(R.id.damaged)
+        val deleteButton : Button = itemView.findViewById(R.id.deleteButton)
         val resources: Resources? = itemView.context.resources
     }
 }
