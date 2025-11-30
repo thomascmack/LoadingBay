@@ -90,20 +90,45 @@ class ProductList(val shipmentID : Long,
         scanStack.add(ScanData(upc, itemName, maxItemID))
     }
 
+    fun removeItem(pos : Int, items : MutableList<Item>) {
+        if(items[pos].flag == "Extra") {
+            removeFromStack(items[pos].itemID)
+            items.removeAt(pos)
+        }
+        else {
+            removeFromStack(items[pos].itemID)
+            items[pos].flag = "Missing"
+            items[pos].damaged = false
+            items[pos].description = ""
+        }
+    }
+
     fun removeItem(itemID : Long, items : MutableList<Item>) {
-        Log.d("items", "removing $itemID")
         for(i in items) {
-            if(i.itemID == itemID && i.flag != "Missing") {
-                Log.d("items", "found item")
+            if(i.itemID == itemID) {
                 if(i.flag == "Extra") {
                     items.remove(i)
                 }
                 else {
                     i.flag = "Missing"
+                    i.damaged = false
+                    i.description = ""
                 }
             }
         }
-        Log.d("Items", items.toString())
+    }
+
+    fun removeFromStack(itemID: Long) {
+        Log.d("Items", "removing from stack")
+        for(s in scanStack) {
+            Log.d("Items", s.toString())
+            if(s.itemID == itemID) {
+                Log.d("Items", "found scan data")
+                scanStack.remove(s)
+                Log.d("Items", "removed scan data")
+                return
+            }
+        }
     }
 
     fun countTotal(upc : Long) : Int {

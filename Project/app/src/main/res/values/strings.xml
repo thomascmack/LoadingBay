@@ -5,13 +5,14 @@
     <string name="item_name">%s</string>
     <string name="quantity"> x%d</string>
     <string name="undo">Undo</string>
-    <string name="damaged">%d Damaged</string>
+    <string name="damaged">Damaged</string>
+    <string name="count_damaged">%d Damaged</string>
     <string name="not_damaged">Not Damaged</string>
     <string name="view_full_list">View Full List</string>
     <string name="scan_start">Scan an item to get started</string>
     <string name="invalid_item">Item not found</string>
     <string name="title_activity_scanned_item">ScannedItem</string>
-    <string name="flag">Missing</string>
+    <string name="flag">%s</string>
     <string name="title_activity_manifest_scan">Leanback ManifestScanActivity</string>
     <string name="browse_title">Videos by Your Company</string>
     <string name="related_movies">Related Videos</string>
@@ -34,4 +35,5 @@
     <string name="itemID">%d</string>
     <string name="description">Description</string>
     <string name="itemDescription">%s</string>
+    <string name="delete">Delete</string>
 </resources>
