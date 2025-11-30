@@ -14,6 +14,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -105,23 +107,18 @@ class ItemScanActivity : ComponentActivity() {
             }
         }
 
+        //Send Back Swipe To Close Button Dialog
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                createCloseDialog()
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, callback)
+
         //Cancel button click listener
         closeButton = findViewById(R.id.cancelButton)
         closeButton.setOnClickListener {
-            val dialog = Dialog(this, R.style.DialogWindowTheme)
-            dialog.setContentView(R.layout.end_shipment_scan_dialog)
-            dialog.show()
-            val confirmButton : Button = dialog.findViewById(R.id.confirmButton)
-            val backButton : Button = dialog.findViewById(R.id.backButton)
-
-            confirmButton.setOnClickListener {
-                dialog.cancel()
-                finish()
-            }
-
-            backButton.setOnClickListener {
-                dialog.cancel()
-            }
+            createCloseDialog()
         }
 
 
@@ -175,6 +172,23 @@ class ItemScanActivity : ComponentActivity() {
                 )
             }
         })
+    }
+
+    fun createCloseDialog() {
+        val dialog = Dialog(this, R.style.DialogWindowTheme)
+        dialog.setContentView(R.layout.end_shipment_scan_dialog)
+        dialog.show()
+        val confirmButton: Button = dialog.findViewById(R.id.confirmButton)
+        val backButton: Button = dialog.findViewById(R.id.backButton)
+
+        confirmButton.setOnClickListener {
+            dialog.cancel()
+            finish()
+        }
+
+        backButton.setOnClickListener {
+            dialog.cancel()
+        }
     }
 
     override fun onResume() {
