@@ -26,6 +26,7 @@ class ItemEditActivity : AppCompatActivity() {
     private var damaged : Boolean = false
     private lateinit var description : String
     private lateinit var saveButton : Button
+    private lateinit var cancelButton : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +78,13 @@ class ItemEditActivity : AppCompatActivity() {
             intent.putExtra("damaged", damaged)
             intent.putExtra("description", description)
             setResult(RESULT_OK, intent)
+            finish()
+        }
+
+        cancelButton = findViewById(R.id.cancelButton)
+        cancelButton.setOnClickListener {
+            val intent = Intent()
+            setResult(RESULT_CANCELED, intent)
             finish()
         }
     }
