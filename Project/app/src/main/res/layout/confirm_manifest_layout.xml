@@ -26,6 +26,7 @@
                 android:textStyle="bold"/>
 
             <TextView
+                android:id="@+id/damaged_items"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -37,6 +38,7 @@
                 android:textSize="30sp" />
 
             <TextView
+                android:id="@+id/missing_items"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -48,6 +50,7 @@
                 android:textSize="30sp" />
 
             <TextView
+                android:id="@+id/extra_items"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"

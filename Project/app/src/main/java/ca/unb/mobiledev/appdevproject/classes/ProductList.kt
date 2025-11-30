@@ -174,5 +174,35 @@ class ProductList(val shipmentID : Long,
         return count
     }
 
+    fun totalDamaged() : Int {
+        var count = 0
+        for(p in this) {
+            for (i in p.items) {
+                if (i.damaged) count++
+            }
+        }
+        return count
+    }
+
+    fun totalMissing() : Int {
+        var count = 0
+        for(p in this) {
+            for (i in p.items) {
+                if (i.flag == "Missing") count++
+            }
+        }
+        return count
+    }
+
+    fun totalExtra() : Int {
+        var count = 0
+        for(p in this) {
+            for (i in p.items) {
+                if (i.flag == "Extra") count++
+            }
+        }
+        return count
+    }
+
     data class ScanData(var upc : Long, var itemName : String, var itemID : Long = 0)
 }

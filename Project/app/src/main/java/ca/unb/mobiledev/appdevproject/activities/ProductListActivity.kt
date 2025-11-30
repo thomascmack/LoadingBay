@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import ca.unb.mobiledev.appdevproject.adapters.ProductListAdapter
 import ca.unb.mobiledev.appdevproject.R
+import ca.unb.mobiledev.appdevproject.classes.ProductList
 
 class ProductListActivity : AppCompatActivity() {
     private lateinit var productRecyclerView: RecyclerView
