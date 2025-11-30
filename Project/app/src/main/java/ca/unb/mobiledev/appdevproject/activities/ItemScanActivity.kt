@@ -27,6 +27,7 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import androidx.core.view.isVisible
 
 class ItemScanActivity : ComponentActivity() {
 
@@ -56,6 +57,8 @@ class ItemScanActivity : ComponentActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        manifest = ManifestScanActivity.getManifest()
 
         //configure options for qrcode scanner
         val options = GmsBarcodeScannerOptions.Builder()
@@ -153,12 +156,17 @@ class ItemScanActivity : ComponentActivity() {
                     switchViewTo(scannedView)
                 }
                 else {
+                    Log.d("Items","found no item")
                     switchViewTo(noItemView)
                 }
             }
         }
 
         undoButton.setOnClickListener {
+            if(noItemView.isVisible && manifest.isNotEmpty()) {
+                switchViewTo(scannedView)
+                return@setOnClickListener
+            }
             manifest.undo()
             if(manifest.isNotEmpty()) {
                 switchViewTo(scannedView)
@@ -201,11 +209,11 @@ class ItemScanActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         Log.d("ItemScan", "activity re-entered")
-        if(manifest.isNotEmpty()) {
-            switchViewTo(scannedView)
+        if(manifest.scanStack.isEmpty()) {
+            switchViewTo(startView)
         }
         else {
-            switchViewTo(startView)
+            updateScannedView()
         }
     }
 
@@ -240,22 +248,19 @@ class ItemScanActivity : ComponentActivity() {
     fun switchViewTo(view : View) {
         when (view) {
             startView -> {
+                if(noItemView.isVisible) return
                 startView.visibility = View.VISIBLE
                 scannedView.visibility = View.GONE
                 noItemView.visibility = View.GONE
             }
             scannedView -> {
-                damaged.tag = false
-                damaged.isChecked = manifest.top()?.damaged ?: false
-                damaged.tag = true
-                descExitText.setText(manifest.top()?.description)
-                itemName.text = manifest.getItemName(manifest.top())
-                itemID.text = manifest.top()?.upc.toString()
+                updateScannedView()
                 startView.visibility = View.GONE
                 scannedView.visibility = View.VISIBLE
                 noItemView.visibility = View.GONE
             }
             noItemView -> {
+                Log.d("Items", "no item view")
                 startView.visibility = View.GONE
                 scannedView.visibility = View.GONE
                 noItemView.visibility = View.VISIBLE
@@ -263,8 +268,17 @@ class ItemScanActivity : ComponentActivity() {
         }
     }
 
+    fun updateScannedView() {
+        damaged.tag = false
+        damaged.isChecked = manifest.top()?.damaged ?: false
+        damaged.tag = true
+        descExitText.setText(manifest.top()?.description)
+        itemName.text = manifest.getItemName(manifest.top())
+        itemID.text = manifest.top()?.upc.toString()
+    }
+
     companion object {
-        private val manifest : ProductList = ManifestScanActivity.getManifest()
+        private lateinit var manifest : ProductList
         fun getScannedItems(): ProductList {return manifest}
     }
 }

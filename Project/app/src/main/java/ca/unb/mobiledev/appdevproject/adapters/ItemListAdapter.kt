@@ -1,13 +1,22 @@
 package ca.unb.mobiledev.appdevproject.adapters
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import ca.unb.mobiledev.appdevproject.R
+import ca.unb.mobiledev.appdevproject.activities.ItemEditActivity
 import ca.unb.mobiledev.appdevproject.classes.ProductList
 import ca.unb.mobiledev.appdevproject.entities.Item
 
@@ -16,12 +25,14 @@ class ItemListAdapter(val productList : ProductList, upc : Long, val parentAdapt
 
         var items = productList.getProduct(upc)?.items ?: mutableListOf()
     lateinit var mRecyclerView : RecyclerView
+    lateinit var context : Context
 
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): MyViewHolder {
+        context = parent.context
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list_view, parent, false)
         return MyViewHolder(view)
     }
@@ -46,6 +57,16 @@ class ItemListAdapter(val productList : ProductList, upc : Long, val parentAdapt
             notifyDataSetChanged()
             parentAdapter.notifyDataSetChanged()
         }
+
+        holder.editButton.setOnClickListener {
+            val intent = Intent(context, ItemEditActivity::class.java)
+            intent.putExtra("itemID", item.itemID)
+            intent.putExtra("itemName", productList.getItemName(item))
+            intent.putExtra("upc", item.upc)
+            intent.putExtra("damaged", item.damaged)
+            intent.putExtra("description", item.description)
+            (context as Activity).startActivityForResult(intent , 0)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -59,10 +80,12 @@ class ItemListAdapter(val productList : ProductList, upc : Long, val parentAdapt
 
         if(item.flag != "Missing") {
             holder.deleteButton.visibility = View.VISIBLE
+            holder.editButton.visibility = View.VISIBLE
             holder.item.setBackgroundColor(holder.resources!!.getColor(R.color.light_green))
         }
         else {
             holder.deleteButton.visibility = View.GONE
+            holder.editButton.visibility = View.GONE
             holder.item.setBackgroundColor(holder.resources!!.getColor(R.color.off_white))
         }
 
@@ -82,6 +105,7 @@ class ItemListAdapter(val productList : ProductList, upc : Long, val parentAdapt
         val itemDescTextView : TextView = itemView.findViewById(R.id.description)
         val itemDamagedTextView : TextView = itemView.findViewById(R.id.damaged)
         val deleteButton : Button = itemView.findViewById(R.id.deleteButton)
+        val editButton : Button = itemView.findViewById(R.id.editButton)
         val resources: Resources? = itemView.context.resources
         val item: View = itemView.findViewById(R.id.item)
     }
