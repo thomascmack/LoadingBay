@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.AppDevProject" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.AppDevProject" parent="android:Theme.Material.Light.NoActionBar" >
+
+    </style>
 
     <style name="DialogWindowTheme" parent="Theme.AppCompat.Dialog">
         <item name="android:windowMinWidthMajor">100%</item>

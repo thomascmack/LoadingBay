@@ -17,7 +17,14 @@
     <string name="product_code">Product Code</string>
     <string name="cancel_shipment_scan">Cancel Shipment Scan?</string>
     <string name="cancel_shipment_scan_warning">Changes will not be saved</string>
+
     <string name="back">Back</string>
+    <string name="save_shipment">Save Shipment</string>
+    <string name="Confirm">Confirm</string>
+    <string name="manifest">Manifest</string>
+    <string name="damaged_items">%d Damaged items</string>
+    <string name="missing_items">%d Missing items</string>
+    <string name="extra_items">%d Extra items</string>
 
 
     <!-- Error messages -->

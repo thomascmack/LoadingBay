@@ -40,6 +40,7 @@ class ItemScanActivity : ComponentActivity() {
     private lateinit var scanManualButton : Button
     private lateinit var closeButton : Button
     private lateinit var undoButton : Button
+    private lateinit var finishButton : Button
     private lateinit var viewFullList : Button
     private lateinit var descExitText : EditText
     private lateinit var scanner : GmsBarcodeScanner
@@ -81,6 +82,12 @@ class ItemScanActivity : ComponentActivity() {
         scanButton = findViewById(R.id.scanButton)
         scanButton.setOnClickListener {
             scanQRCode(this)
+        }
+
+        finishButton = findViewById(R.id.finishButton)
+        finishButton.setOnClickListener {
+            val intent = Intent(this@ItemScanActivity, ConfirmManifestActivity::class.java)
+            startActivity(intent)
         }
 
         // Manual button click listener
