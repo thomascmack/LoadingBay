@@ -28,4 +28,5 @@
     <string name="itemDescription">%s</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
+    <string name="save_changes">Save Changes</string>
 </resources>

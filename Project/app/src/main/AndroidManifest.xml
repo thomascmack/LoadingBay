@@ -23,7 +23,8 @@
         android:theme="@style/Theme.AppDevProject">
         <activity
             android:name=".activities.ItemEditActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".activities.ItemScanActivity"
             android:exported="true"

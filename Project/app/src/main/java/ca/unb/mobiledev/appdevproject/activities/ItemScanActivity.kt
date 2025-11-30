@@ -55,6 +55,8 @@ class ItemScanActivity : ComponentActivity() {
             insets
         }
 
+        manifest = ManifestScanActivity.getManifest()
+
         //configure options for qrcode scanner
         val options = GmsBarcodeScannerOptions.Builder()
             .setBarcodeFormats(Barcode.FORMAT_UPC_A)
@@ -183,6 +185,11 @@ class ItemScanActivity : ComponentActivity() {
         })
     }
 
+    override fun onStart() {
+        super.onStart()
+
+    }
+
     override fun onResume() {
         super.onResume()
         Log.d("ItemScan", "activity re-entered")
@@ -255,7 +262,7 @@ class ItemScanActivity : ComponentActivity() {
     }
 
     companion object {
-        private val manifest : ProductList = ManifestScanActivity.getManifest()
+        private lateinit var manifest : ProductList
         fun getScannedItems(): ProductList {return manifest}
     }
 }
