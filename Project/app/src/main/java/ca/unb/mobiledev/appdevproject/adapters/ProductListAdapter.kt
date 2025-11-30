@@ -36,7 +36,7 @@ class ProductListAdapter(private val products : ProductList) :
 
         val product = products.elementAt(holder.absoluteAdapterPosition)
 
-        holder.itemRecyclerView.adapter = ItemListAdapter(products, product.product.upc)
+        holder.itemRecyclerView.adapter = ItemListAdapter(products, product.product.upc, this)
 
         holder.upcTextView.text = holder.resources!!.getString(R.string.item_id, product.product.upc)
 
@@ -45,7 +45,6 @@ class ProductListAdapter(private val products : ProductList) :
         holder.itemsReceivedTextView.text = holder.resources.getString(R.string.receivedCount, products.countReceived(product.product.upc), products.countExpected(product.product.upc))
 
         holder.damagedTextView.text = holder.resources.getString(R.string.count_damaged, products.countDamaged(product.product.upc))
-        //holder.itemView.setOnClickListener { listener(course) }
     }
 
     override fun getItemCount(): Int {

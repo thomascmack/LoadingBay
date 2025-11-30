@@ -98,6 +98,8 @@ class ProductList(val shipmentID : Long,
         else {
             for(i in items.subList(pos, items.size)) {
                 if (i.flag == "Extra") {
+                    items[pos].damaged = false
+                    items[pos].description = ""
                     removeFromStack(i.itemID)
                     items.remove(i)
                     return

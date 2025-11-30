@@ -1,7 +1,6 @@
 package ca.unb.mobiledev.appdevproject.adapters
 
 import android.content.res.Resources
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +11,11 @@ import ca.unb.mobiledev.appdevproject.R
 import ca.unb.mobiledev.appdevproject.classes.ProductList
 import ca.unb.mobiledev.appdevproject.entities.Item
 
-class ItemListAdapter(val productList : ProductList, upc : Long) :
+class ItemListAdapter(val productList : ProductList, upc : Long, val ParentAdapter : ProductListAdapter) :
     RecyclerView.Adapter<ItemListAdapter.MyViewHolder>() {
 
         var items = productList.getProduct(upc)?.items ?: mutableListOf()
+    lateinit var mRecyclerView : RecyclerView
 
 
     override fun onCreateViewHolder(
@@ -24,6 +24,12 @@ class ItemListAdapter(val productList : ProductList, upc : Long) :
     ): MyViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list_view, parent, false)
         return MyViewHolder(view)
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+
+        mRecyclerView = recyclerView
     }
 
     override fun onBindViewHolder(
@@ -36,13 +42,9 @@ class ItemListAdapter(val productList : ProductList, upc : Long) :
         updateView(item, holder)
 
         holder.deleteButton.setOnClickListener {
-            Log.d("Delete", "deleting item")
             productList.removeItem(holder.absoluteAdapterPosition, items)
-            Log.d("Items", "notify change")
             notifyDataSetChanged()
-//            notifyItemRemoved(holder.absoluteAdapterPosition)
-//            notifyItemRangeChanged(holder.absoluteAdapterPosition, items.size - holder.absoluteAdapterPosition)
-            //updateView(item, holder)
+            ParentAdapter.notifyDataSetChanged()
         }
     }
 
