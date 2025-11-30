@@ -96,6 +96,13 @@ class ProductList(val shipmentID : Long,
             items.removeAt(pos)
         }
         else {
+            for(i in items.subList(pos, items.size)) {
+                if (i.flag == "Extra") {
+                    removeFromStack(i.itemID)
+                    items.remove(i)
+                    return
+                }
+            }
             removeFromStack(items[pos].itemID)
             items[pos].flag = "Missing"
             items[pos].damaged = false
@@ -108,24 +115,22 @@ class ProductList(val shipmentID : Long,
             if(i.itemID == itemID) {
                 if(i.flag == "Extra") {
                     items.remove(i)
+                    return
                 }
                 else {
                     i.flag = "Missing"
                     i.damaged = false
                     i.description = ""
+                    return
                 }
             }
         }
     }
 
     fun removeFromStack(itemID: Long) {
-        Log.d("Items", "removing from stack")
         for(s in scanStack) {
-            Log.d("Items", s.toString())
             if(s.itemID == itemID) {
-                Log.d("Items", "found scan data")
                 scanStack.remove(s)
-                Log.d("Items", "removed scan data")
                 return
             }
         }
