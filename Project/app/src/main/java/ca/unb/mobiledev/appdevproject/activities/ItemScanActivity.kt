@@ -274,7 +274,8 @@ class ItemScanActivity : ComponentActivity() {
         damaged.tag = true
         descExitText.setText(manifest.top()?.description)
         itemName.text = manifest.getItemName(manifest.top())
-        itemID.text = manifest.top()?.upc.toString()
+        itemID.text = getString(R.string.item_id, manifest.top()?.upc)
+        //itemID.text = manifest.top()?.upc.toString()
     }
 
     companion object {
