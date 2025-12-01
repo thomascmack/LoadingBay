@@ -1,6 +1,7 @@
 package ca.unb.mobiledev.appdevproject.adapters
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -20,6 +21,7 @@ import ca.unb.mobiledev.appdevproject.activities.ItemEditActivity
 import ca.unb.mobiledev.appdevproject.classes.ProductList
 import ca.unb.mobiledev.appdevproject.entities.Item
 
+private lateinit var dialog : Dialog
 class ItemListAdapter(val productList : ProductList, upc : Long, val parentAdapter : ProductListAdapter) :
     RecyclerView.Adapter<ItemListAdapter.MyViewHolder>() {
 
@@ -53,9 +55,24 @@ class ItemListAdapter(val productList : ProductList, upc : Long, val parentAdapt
         updateView(item, holder)
 
         holder.deleteButton.setOnClickListener {
-            productList.removeItem(holder.absoluteAdapterPosition, items)
-            notifyDataSetChanged()
-            parentAdapter.notifyDataSetChanged()
+            val dialog = Dialog(context, R.style.DialogWindowTheme)
+            dialog.setContentView(R.layout.delete_item_dialog)
+            dialog.show()
+            val confirmButton: Button = dialog.findViewById(R.id.confirmButton)
+            val backButton: Button = dialog.findViewById(R.id.backButton)
+            val warningText : TextView = dialog.findViewById(R.id.warningText)
+            warningText.text = context.getString(R.string.delete_item, productList.getItemName(item))
+
+            confirmButton.setOnClickListener {
+                productList.removeItem(holder.absoluteAdapterPosition, items)
+                notifyDataSetChanged()
+                parentAdapter.notifyDataSetChanged()
+                dialog.cancel()
+            }
+
+            backButton.setOnClickListener {
+                dialog.cancel()
+            }
         }
 
         holder.editButton.setOnClickListener {

@@ -10,11 +10,12 @@
         >
 
         <TextView
+            android:id="@+id/warningText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:maxLines="2"
+            android:maxLines="4"
             android:paddingTop="18dp"
             android:text="@string/delete_item"
             android:textAlignment="center"

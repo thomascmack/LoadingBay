@@ -26,7 +26,7 @@
     <string name="missing_items">%d Missing items</string>
     <string name="extra_items">%d Extra items</string>
 
-    <string name="delete_item">Delete %s from the manifest?</string>
+    <string name="delete_item">Delete &quot;%s&quot; from the manifest?</string>
 
 
     <!-- Error messages -->
