@@ -275,7 +275,6 @@ class ItemScanActivity : ComponentActivity() {
         descExitText.setText(manifest.top()?.description)
         itemName.text = manifest.getItemName(manifest.top())
         itemID.text = getString(R.string.item_id, manifest.top()?.upc)
-        //itemID.text = manifest.top()?.upc.toString()
     }
 
     companion object {

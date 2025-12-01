@@ -2,21 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_field_background"
+    android:background="@drawable/login_background"
     android:gravity="center">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:textAlignment="center"
-        android:text="@string/scan_start"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="24dp"
         android:maxLines="2"
-        android:layout_margin="10dp"
-        android:layout_weight="1"
         android:padding="18dp"
+        android:text="@string/scan_start"
+        android:textAlignment="center"
         android:textColor="@color/dark_grey"
-        />
+        android:textSize="40sp"
+        android:textStyle="bold" />
 
 
 </RelativeLayout>
