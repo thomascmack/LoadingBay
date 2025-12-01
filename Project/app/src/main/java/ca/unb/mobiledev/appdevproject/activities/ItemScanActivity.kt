@@ -8,6 +8,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
@@ -46,6 +48,7 @@ class ItemScanActivity : ComponentActivity() {
     private lateinit var descExitText : EditText
     private lateinit var scanner : GmsBarcodeScanner
     private lateinit var viewModel : MyViewModel
+    private lateinit var dialog : Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,23 +96,39 @@ class ItemScanActivity : ComponentActivity() {
             startActivity(intent)
         }
 
+        dialog = Dialog(this, R.style.DialogWindowTheme)
+
         // Manual button click listener
         scanManualButton = findViewById(R.id.manualButton)
         scanManualButton.setOnClickListener {
-            val dialog = Dialog(this, R.style.DialogWindowTheme)
             dialog.setContentView(R.layout.enter_product_id_dialog)
+            dialog.window!!
+                .clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
+            dialog.window!!
+                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
             dialog.show()
             val finishProductIDButton : Button = dialog.findViewById(R.id.finishButton)
             val cancelProductIDButton : Button = dialog.findViewById(R.id.cancelButton)
+            val upcEditText = dialog.findViewById<EditText>(R.id.productCode)
+            upcEditText.requestFocus()
 
+            upcEditText.setOnEditorActionListener { v, actionId, event ->
+                var handled = false
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    val upc = upcEditText.text.toString()
+                    if (upc.isNotEmpty()) {
+                        viewModel.search(upc.toLong())
+                    }
+                    handled = true
+                }
+                handled
+            }
 
             finishProductIDButton.setOnClickListener {
-                val upc =  dialog.findViewById<EditText>(R.id.productCode).text.toString()
+                val upc =  upcEditText.text.toString()
                 if(upc.isNotEmpty()) {
                     viewModel.search(upc.toLong())
                 }
-                else Toast.makeText(this, "Please enter a product code", Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
             }
 
             cancelProductIDButton.setOnClickListener {
@@ -150,12 +169,14 @@ class ItemScanActivity : ComponentActivity() {
         viewModel.searchItems.observe(this) { products ->
             products?.let {
                 if(products.isNotEmpty()) {
+                    dialog.dismiss()
                     for (p in products) {
                         manifest.scanItem(p.upc, p.itemName)
                     }
                     switchViewTo(scannedView)
                 }
                 else {
+                    dialog.dismiss()
                     Log.d("Items","found no item")
                     switchViewTo(noItemView)
                 }
@@ -223,19 +244,7 @@ class ItemScanActivity : ComponentActivity() {
             .addOnSuccessListener { barcode ->
                 val rawValue: String? = barcode.rawValue
                 val id = rawValue?.toLong() ?: 0
-                val duration = Toast.LENGTH_SHORT
-
-                val toast = Toast.makeText(context, id.toString(), duration)
-                toast.show()
-
                 viewModel.search(id)
-            }
-            .addOnCanceledListener {
-                val text = "Canceled"
-                val duration = Toast.LENGTH_SHORT
-
-                val toast = Toast.makeText(context, text, duration)
-                toast.show()
             }
             .addOnFailureListener { e ->
                 val duration = Toast.LENGTH_SHORT

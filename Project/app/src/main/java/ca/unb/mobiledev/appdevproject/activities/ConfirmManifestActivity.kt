@@ -2,6 +2,7 @@ package ca.unb.mobiledev.appdevproject.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -53,6 +54,7 @@ class ConfirmManifestActivity : AppCompatActivity() {
         saveButton = findViewById(R.id.saveButton)
         saveButton.setOnClickListener {
             val intent = Intent(this@ConfirmManifestActivity, ManifestScanActivity::class.java)
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
             finish()
         }
@@ -78,6 +80,21 @@ class ConfirmManifestActivity : AppCompatActivity() {
             extra.text = getString(R.string.extra_items, totalExtra)
         }
         else extra.visibility = View.GONE
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0 && resultCode == RESULT_OK && data != null) {
+            val itemID = data.getLongExtra("itemID", 0)
+            val upc = data.getLongExtra("upc", 0)
+            val damaged = data.getBooleanExtra("damaged", false)
+            Log.d("Item Edit", "$damaged")
+            val description = data.getStringExtra("description")
+            manifest.getItem(upc, itemID)?.damaged = damaged
+            manifest.getItem(upc, itemID)?.description = description
+            productRecyclerView.adapter?.notifyDataSetChanged()
+            calculateTotals()
+        }
     }
     companion object {
         private val manifest : ProductList = ManifestScanActivity.getManifest()
