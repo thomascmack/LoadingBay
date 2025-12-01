@@ -34,6 +34,8 @@ class ConfirmManifestActivity : AppCompatActivity() {
             insets
         }
 
+        manifest = ManifestScanActivity.getManifest()
+
         damaged = findViewById(R.id.damaged_items)
         missing = findViewById(R.id.missing_items)
         extra = findViewById(R.id.extra_items)
@@ -97,7 +99,7 @@ class ConfirmManifestActivity : AppCompatActivity() {
         }
     }
     companion object {
-        private val manifest : ProductList = ManifestScanActivity.getManifest()
+        private lateinit var manifest : ProductList
         fun getScannedItems(): ProductList {return manifest}
     }
 }
