@@ -60,6 +60,10 @@ class ConfirmManifestActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        productRecyclerView.setRecyclerListener {
+            calculateTotals()
+        }
     }
 
     fun calculateTotals() {
