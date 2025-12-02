@@ -7,7 +7,6 @@
     android:layout_marginBottom="5dp"
     android:padding="10dp">
 
-    <!-- Edit/Delete Buttons -->
     <Button
         android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
@@ -69,7 +68,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemName" />
 
-    <!-- Damaged -->
     <TextView
         android:id="@+id/damaged"
         android:layout_width="0dp"
@@ -84,7 +82,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/flag" />
 
-    <!-- Description -->
     <TextView
         android:id="@+id/description"
         android:layout_width="0dp"
