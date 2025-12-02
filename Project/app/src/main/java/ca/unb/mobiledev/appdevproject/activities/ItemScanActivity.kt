@@ -68,26 +68,21 @@ class ItemScanActivity : ComponentActivity() {
 
         manifest = ManifestScanActivity.getManifest()
 
-        //configure options for qrcode scanner
-//        val options = GmsBarcodeScannerOptions.Builder()
-//            .setBarcodeFormats(Barcode.FORMAT_UPC_A)
-//            .build()
-//
-//        //instantiate scanner
-//        scanner = GmsBarcodeScanning.getClient(this, options)
-
         startView = findViewById(R.id.start)
         scannedView = findViewById(R.id.scannedItem)
         noItemView = findViewById(R.id.invalidItem)
+        productRecyclerView = findViewById(R.id.scannedList)
+        productRecyclerView.adapter = ProductListAdapter(manifest)
 
         itemName = findViewById(R.id.itemName)
         itemID = findViewById(R.id.itemID)
         damaged = findViewById(R.id.damaged)
+        descExitText = findViewById(R.id.description)
 
         undoButton = findViewById(R.id.undoButton)
         viewFullList = findViewById(R.id.fullList)
 
-        descExitText = findViewById(R.id.description)
+        dialog = Dialog(this, R.style.DialogWindowTheme)
 
         // Scan button click listener
         scanButton = findViewById(R.id.scanButton)
@@ -108,13 +103,15 @@ class ItemScanActivity : ComponentActivity() {
             }
         }
 
-        finishButton = findViewById(R.id.finishButton)
-        finishButton.setOnClickListener {
-            val intent = Intent(this@ItemScanActivity, ConfirmManifestActivity::class.java)
-            startActivity(intent)
+        viewFullList.setOnClickListener {
+            showList = !showList
+            if(showList) {
+                switchViewTo(productRecyclerView)
+            }
+            else {
+                switchViewTo(scannedView)
+            }
         }
-
-        dialog = Dialog(this, R.style.DialogWindowTheme)
 
         // Manual button click listener
         scanManualButton = findViewById(R.id.manualButton)
@@ -154,6 +151,12 @@ class ItemScanActivity : ComponentActivity() {
             }
         }
 
+        finishButton = findViewById(R.id.finishButton)
+        finishButton.setOnClickListener {
+            val intent = Intent(this@ItemScanActivity, ConfirmManifestActivity::class.java)
+            startActivity(intent)
+        }
+
         //Send Back Swipe To Close Button Dialog
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -166,25 +169,6 @@ class ItemScanActivity : ComponentActivity() {
         closeButton = findViewById(R.id.cancelButton)
         closeButton.setOnClickListener {
             createCloseDialog()
-        }
-
-
-        viewFullList.setOnClickListener {
-            showList = !showList
-            if(showList) {
-                switchViewTo(productRecyclerView)
-            }
-            else {
-                if (noItemView.isVisible && manifest.isNotEmpty()) {
-                    switchViewTo(scannedView)
-                    return@setOnClickListener
-                }
-                if (manifest.isNotEmpty()) {
-                    switchViewTo(scannedView)
-                } else {
-                    switchViewTo(startView)
-                }
-            }
         }
 
         damaged.tag = true
@@ -205,31 +189,26 @@ class ItemScanActivity : ComponentActivity() {
                         Log.d("Extra", p.itemName)
                         manifest.scanItem(p.upc, p.itemName)
                     }
-                    switchViewTo(scannedView)
+                    updateScannedData()
                 }
                 else {
                     dialog.dismiss()
-                    Log.d("Items","found no item")
                     switchViewTo(noItemView)
                 }
             }
         }
 
         undoButton.setOnClickListener {
-            if(showList) {
+            if(noItemView.isVisible && showList) {
                 switchViewTo(productRecyclerView)
             }
+            else if(noItemView.isVisible && !showList) {
+                switchViewTo(scannedView)
+            }
             else {
-                if (noItemView.isVisible && manifest.isNotEmpty()) {
-                    switchViewTo(scannedView)
-                    return@setOnClickListener
-                }
+                Log.d("Undoing", "Undoing")
                 manifest.undo()
-                if (manifest.isNotEmpty()) {
-                    switchViewTo(scannedView)
-                } else {
-                    switchViewTo(startView)
-                }
+                updateScannedData()
             }
         }
 
@@ -285,62 +264,68 @@ class ItemScanActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        if(!showList) {
-            if (manifest.scanStack.isEmpty()) {
-                switchViewTo(startView)
-            } else {
-                updateScannedView()
-            }
-        }
-        else {
-            switchViewTo(productRecyclerView)
-        }
+        updateScannedData()
     }
 
     fun switchViewTo(view : View) {
         when (view) {
-            startView -> {
-                if(noItemView.isVisible) return
-                viewFullList.text = getString(R.string.view_full_list)
-                startView.visibility = View.VISIBLE
-                scannedView.visibility = View.GONE
-                noItemView.visibility = View.GONE
-                productRecyclerView.visibility = View.GONE
-            }
             scannedView -> {
-                updateScannedView()
                 viewFullList.text = getString(R.string.view_full_list)
+                if(manifest.scanStack.isEmpty()) {
+                    startView.visibility = View.VISIBLE
+                    scannedView.visibility = View.GONE
+                    noItemView.visibility = View.GONE
+                    productRecyclerView.visibility = View.GONE
+                    return
+                }
                 startView.visibility = View.GONE
                 scannedView.visibility = View.VISIBLE
                 noItemView.visibility = View.GONE
                 productRecyclerView.visibility = View.GONE
             }
+            productRecyclerView -> {
+                viewFullList.text = getString(R.string.view_curr_item)
+                startView.visibility = View.GONE
+                scannedView.visibility = View.GONE
+                noItemView.visibility = View.GONE
+                productRecyclerView.visibility = View.VISIBLE
+            }
             noItemView -> {
-                Log.d("Items", "no item view")
-                viewFullList.text = getString(R.string.view_full_list)
                 startView.visibility = View.GONE
                 scannedView.visibility = View.GONE
                 noItemView.visibility = View.VISIBLE
                 productRecyclerView.visibility = View.GONE
             }
-            productRecyclerView -> {
-                startView.visibility = View.GONE
-                scannedView.visibility = View.GONE
-                noItemView.visibility = View.GONE
-                viewFullList.text = getString(R.string.view_curr_item)
-                productRecyclerView.visibility = View.VISIBLE
-                productRecyclerView.adapter?.notifyDataSetChanged()
-            }
         }
     }
 
-    fun updateScannedView() {
+    fun updateScannedData() {
+        var test1 = !showList
+        var test2 = manifest.scanStack.isEmpty()
+        if(!showList && manifest.scanStack.isEmpty()) {
+            startView.visibility = View.VISIBLE
+            scannedView.visibility = View.GONE
+            productRecyclerView.visibility = View.GONE
+            noItemView.visibility = View.GONE
+            return
+        }
+        else if(showList && manifest.scanStack.isEmpty()) {
+            productRecyclerView.adapter?.notifyDataSetChanged()
+            return
+        }
+        else if(startView.isVisible) {
+            startView.visibility = View.GONE
+            scannedView.visibility = View.VISIBLE
+            productRecyclerView.visibility = View.GONE
+            noItemView.visibility = View.GONE
+        }
         damaged.tag = false
         damaged.isChecked = manifest.top()?.damaged ?: false
         damaged.tag = true
         descExitText.setText(manifest.top()?.description)
         itemName.text = manifest.getItemName(manifest.top())
         itemID.text = getString(R.string.item_id, manifest.top()?.upc)
+        productRecyclerView.adapter?.notifyDataSetChanged()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
