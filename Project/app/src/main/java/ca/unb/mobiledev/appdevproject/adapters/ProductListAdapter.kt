@@ -1,6 +1,7 @@
 package ca.unb.mobiledev.appdevproject.adapters
 
 import android.content.res.Resources
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,16 +51,17 @@ class ProductListAdapter(private val products : ProductList) :
         val received = products.countReceived(product.product.upc)
 
         if (expected == received) {
-            holder.topTag.setBackgroundColor(holder.resources.getColor(R.color.green))
-            //holder.topTag.background = holder.resources.getDrawable(R.drawable.product_received)
+            //holder.topTag.setBackgroundColor(holder.resources.getColor(R.color.green))
+            holder.topTag.background = holder.resources.getDrawable(R.drawable.product_received)
         }
         else if (expected > received) {
-            holder.topTag.setBackgroundColor(holder.resources.getColor(R.color.dark_grey))
+            holder.topTag.background = holder.resources.getDrawable(R.drawable.product_missing)
+            //holder.topTag.setBackgroundColor(holder.resources.getColor(R.color.dark_grey))
             //holder.topTag.background = holder.resources.getDrawable(R.drawable.product_missing)
         }
         else {
-            holder.topTag.setBackgroundColor(holder.resources.getColor(R.color.purple))
-            //holder.topTag.background = holder.resources.getDrawable(R.drawable.product_extra)
+            //holder.topTag.setBackgroundColor(holder.resources.getColor(R.color.purple))
+            holder.topTag.background = holder.resources.getDrawable(R.drawable.product_extra)
         }
 
 

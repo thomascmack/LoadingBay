@@ -10,9 +10,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/relativeLayout2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,19 +24,17 @@
             android:id="@+id/itemName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="2"
             android:padding="18dp"
             android:text="@string/item_name"
             android:textAlignment="center"
             android:textColor="@color/dark_grey"
             android:textSize="40sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/itemID"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:padding="3dp"
@@ -45,8 +42,6 @@
             android:textAlignment="center"
             android:textColor="@color/dark_grey"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/itemName" />
 
         <CheckBox
@@ -71,11 +66,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:layout_marginStart="8dp"
             android:background="@drawable/textfield1"
             android:hint="@string/description"
             android:inputType="text"
-            android:maxLines="3"
             android:padding="18dp"
             android:textColor="@color/dark_grey"
             android:textColorHint="@color/light_grey"
