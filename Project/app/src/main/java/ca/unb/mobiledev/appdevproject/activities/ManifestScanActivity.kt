@@ -38,10 +38,17 @@ class ManifestScanActivity : ComponentActivity() {
 
 
         scanButton.setOnClickListener {
-            if (hasCameraPermission()) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED) {
                 startScan()
             } else {
-                requestPermission()
+                ActivityCompat.requestPermissions(
+                    this,
+                    CAMERA_PERMISSION,
+                    CAMERA_REQUEST_CODE
+                )
             }
         }
 
@@ -111,21 +118,6 @@ class ManifestScanActivity : ComponentActivity() {
         }
     }
 
-    private fun hasCameraPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            CAMERA_PERMISSION,
-            CAMERA_REQUEST_CODE
-        )
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>,
         grantResults: IntArray
@@ -137,13 +129,14 @@ class ManifestScanActivity : ComponentActivity() {
             ) {
                 startScan()
             } else {
-                Toast.makeText(this, "Please grant camera permission", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Grant camera permission to use scanner", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun startScan() {
         val intent = Intent(this, CameraActivity::class.java)
+        intent.putExtra("request", QR_SCAN_REQUEST)
         startActivityForResult(intent, QR_SCAN_REQUEST)
     }
 

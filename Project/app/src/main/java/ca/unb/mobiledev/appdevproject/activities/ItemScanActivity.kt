@@ -2,7 +2,6 @@ package ca.unb.mobiledev.appdevproject.activities
 
 import android.Manifest
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -31,7 +30,6 @@ import ca.unb.mobiledev.appdevproject.R
 import ca.unb.mobiledev.appdevproject.adapters.ProductListAdapter
 import ca.unb.mobiledev.appdevproject.classes.ProductList
 import ca.unb.mobiledev.appdevproject.ui.MyViewModel
-import com.google.mlkit.vision.barcode.common.Barcode
 
 class ItemScanActivity : ComponentActivity() {
 
@@ -48,7 +46,6 @@ class ItemScanActivity : ComponentActivity() {
     private lateinit var finishButton : Button
     private lateinit var viewFullList : Button
     private lateinit var descExitText : EditText
-    //private lateinit var scanner : GmsBarcodeScanner
     private lateinit var viewModel : MyViewModel
     private lateinit var dialog : Dialog
     private lateinit var productRecyclerView: RecyclerView
@@ -95,10 +92,19 @@ class ItemScanActivity : ComponentActivity() {
         // Scan button click listener
         scanButton = findViewById(R.id.scanButton)
         scanButton.setOnClickListener {
-            if (hasCameraPermission()) {
-                startScan()
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED) {
+                val intent = Intent(this, CameraActivity::class.java)
+                intent.putExtra("request", UPC_SCAN_REQUEST)
+                startActivityForResult(intent, UPC_SCAN_REQUEST)
             } else {
-                requestPermission()
+                ActivityCompat.requestPermissions(
+                    this,
+                    CAMERA_PERMISSION,
+                    CAMERA_REQUEST_CODE
+                )
             }
         }
 
@@ -260,22 +266,6 @@ class ItemScanActivity : ComponentActivity() {
         }
     }
 
-
-    private fun hasCameraPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            CAMERA_PERMISSION,
-            CAMERA_REQUEST_CODE
-        )
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>,
         grantResults: IntArray
@@ -285,16 +275,12 @@ class ItemScanActivity : ComponentActivity() {
             CAMERA_REQUEST_CODE -> if (grantResults.isNotEmpty() &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED
             ) {
-                startScan()
+                val intent = Intent(this, CameraActivity::class.java)
+                startActivityForResult(intent, UPC_SCAN_REQUEST)
             } else {
                 Toast.makeText(this, "Please grant camera permission", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    private fun startScan() {
-        val intent = Intent(this, CameraActivity::class.java)
-        startActivityForResult(intent, UPC_SCAN_REQUEST)
     }
 
     override fun onResume() {
@@ -310,23 +296,6 @@ class ItemScanActivity : ComponentActivity() {
             switchViewTo(productRecyclerView)
         }
     }
-
-//    fun scanQRCode(context : Context) {
-//        //start scan and handle results
-//        scanner.startScan()
-//            .addOnSuccessListener { barcode ->
-//                val rawValue: String? = barcode.rawValue
-//                val id = rawValue?.toLong() ?: 0
-//                Log.d("UPC", "$id")
-//                viewModel.search(id)
-//            }
-//            .addOnFailureListener { e ->
-//                val duration = Toast.LENGTH_SHORT
-//
-//                val toast = Toast.makeText(context, e.toString(), duration)
-//                toast.show()
-//            }
-//    }
 
     fun switchViewTo(view : View) {
         when (view) {
