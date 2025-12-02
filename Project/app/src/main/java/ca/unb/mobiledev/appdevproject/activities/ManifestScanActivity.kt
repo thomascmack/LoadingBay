@@ -97,6 +97,10 @@ class ManifestScanActivity : ComponentActivity() {
                         Log.d("Shipment", p.toString())
                         manifest.add(p)
                         for(i in p.items) {
+                            if(i.shipmentID != manifest.shipmentID) {
+                                p.items.remove(i)
+                                break
+                            }
                             if(i.itemID > manifest.maxItemID) manifest.maxItemID = i.itemID
                         }
                     }
