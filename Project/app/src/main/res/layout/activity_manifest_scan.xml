@@ -1,47 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_background"
-    android:gravity="top"
-    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
 
-    >
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <Button
-            android:id="@+id/manualButton"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <!-- The weight is to center it, excluding the things with no weight -->
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:background="@drawable/button3"
-            android:padding="18dp"
-            android:layout_margin="10dp"
-            android:text="@string/manual_manifest_id_entry"
-            android:textAllCaps="false"
-            android:textColor="@color/green"
-            android:textSize="20sp"
-            android:layout_alignParentBottom="true" />
+            android:layout_height="match_parent"
+            android:layout_margin="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/loading_bay_logo"/>
+
+        <!-- This is a spacer, alter height to move logo up or down -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:orientation="vertical"/>
 
         <Button
             android:id="@+id/QRscanButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-
-            android:layout_marginStart="0dp"
+            android:text="@string/scan_manifest_qr_code"
             android:background="@drawable/button1"
+            android:textColor="@color/white"
             android:padding="18dp"
             android:layout_margin="10dp"
-            android:text="@string/scan_manifest_qr_code"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
             android:textSize="20sp"
-            android:layout_above="@+id/manualButton" />
-    </RelativeLayout>
+            android:textAllCaps="false"/>
+            <!--
+            android:layout_above="@+id/manualButton"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="0dp"
+            -->
 
-</LinearLayout>
+        <Button
+            android:id="@+id/manualButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/manual_manifest_id_entry"
+            android:background="@drawable/button3"
+            android:textColor="@color/green"
+            android:padding="18dp"
+            android:layout_margin="10dp"
+            android:textSize="20sp"
+            android:textAllCaps="false" />
+            <!--
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            -->
+
+    </LinearLayout>
+
+</RelativeLayout>
