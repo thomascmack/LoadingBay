@@ -1,8 +1,10 @@
 package ca.unb.mobiledev.appdevproject.activities
 
+import android.Manifest
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,6 +20,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -28,9 +32,6 @@ import ca.unb.mobiledev.appdevproject.adapters.ProductListAdapter
 import ca.unb.mobiledev.appdevproject.classes.ProductList
 import ca.unb.mobiledev.appdevproject.ui.MyViewModel
 import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
-import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 
 class ItemScanActivity : ComponentActivity() {
 
@@ -47,11 +48,15 @@ class ItemScanActivity : ComponentActivity() {
     private lateinit var finishButton : Button
     private lateinit var viewFullList : Button
     private lateinit var descExitText : EditText
-    private lateinit var scanner : GmsBarcodeScanner
+    //private lateinit var scanner : GmsBarcodeScanner
     private lateinit var viewModel : MyViewModel
     private lateinit var dialog : Dialog
     private lateinit var productRecyclerView: RecyclerView
     private var showList : Boolean = false
+    private val EDIT_REQUEST_CODE = 1
+    private val CAMERA_PERMISSION: Array<String> = arrayOf(Manifest.permission.CAMERA)
+    private val CAMERA_REQUEST_CODE: Int = 10
+    private val UPC_SCAN_REQUEST = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,12 +72,12 @@ class ItemScanActivity : ComponentActivity() {
         manifest = ManifestScanActivity.getManifest()
 
         //configure options for qrcode scanner
-        val options = GmsBarcodeScannerOptions.Builder()
-            .setBarcodeFormats(Barcode.FORMAT_UPC_A)
-            .build()
-
-        //instantiate scanner
-        scanner = GmsBarcodeScanning.getClient(this, options)
+//        val options = GmsBarcodeScannerOptions.Builder()
+//            .setBarcodeFormats(Barcode.FORMAT_UPC_A)
+//            .build()
+//
+//        //instantiate scanner
+//        scanner = GmsBarcodeScanning.getClient(this, options)
 
         startView = findViewById(R.id.start)
         scannedView = findViewById(R.id.scannedItem)
@@ -90,7 +95,11 @@ class ItemScanActivity : ComponentActivity() {
         // Scan button click listener
         scanButton = findViewById(R.id.scanButton)
         scanButton.setOnClickListener {
-            scanQRCode(this)
+            if (hasCameraPermission()) {
+                startScan()
+            } else {
+                requestPermission()
+            }
         }
 
         finishButton = findViewById(R.id.finishButton)
@@ -251,6 +260,43 @@ class ItemScanActivity : ComponentActivity() {
         }
     }
 
+
+    private fun hasCameraPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            CAMERA_PERMISSION,
+            CAMERA_REQUEST_CODE
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            CAMERA_REQUEST_CODE -> if (grantResults.isNotEmpty() &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED
+            ) {
+                startScan()
+            } else {
+                Toast.makeText(this, "Please grant camera permission", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun startScan() {
+        val intent = Intent(this, CameraActivity::class.java)
+        startActivityForResult(intent, UPC_SCAN_REQUEST)
+    }
+
     override fun onResume() {
         super.onResume()
         if(!showList) {
@@ -265,22 +311,22 @@ class ItemScanActivity : ComponentActivity() {
         }
     }
 
-    fun scanQRCode(context : Context) {
-        //start scan and handle results
-        scanner.startScan()
-            .addOnSuccessListener { barcode ->
-                val rawValue: String? = barcode.rawValue
-                val id = rawValue?.toLong() ?: 0
-                Log.d("UPC", "$id")
-                viewModel.search(id)
-            }
-            .addOnFailureListener { e ->
-                val duration = Toast.LENGTH_SHORT
-
-                val toast = Toast.makeText(context, e.toString(), duration)
-                toast.show()
-            }
-    }
+//    fun scanQRCode(context : Context) {
+//        //start scan and handle results
+//        scanner.startScan()
+//            .addOnSuccessListener { barcode ->
+//                val rawValue: String? = barcode.rawValue
+//                val id = rawValue?.toLong() ?: 0
+//                Log.d("UPC", "$id")
+//                viewModel.search(id)
+//            }
+//            .addOnFailureListener { e ->
+//                val duration = Toast.LENGTH_SHORT
+//
+//                val toast = Toast.makeText(context, e.toString(), duration)
+//                toast.show()
+//            }
+//    }
 
     fun switchViewTo(view : View) {
         when (view) {
@@ -326,7 +372,7 @@ class ItemScanActivity : ComponentActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 0 && resultCode == RESULT_OK && data != null) {
+        if (requestCode == EDIT_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             val itemID = data.getLongExtra("itemID", 0)
             val upc = data.getLongExtra("upc", 0)
             val damaged = data.getBooleanExtra("damaged", false)
@@ -335,6 +381,10 @@ class ItemScanActivity : ComponentActivity() {
             manifest.getItem(upc, itemID)?.damaged = damaged
             manifest.getItem(upc, itemID)?.description = description
             productRecyclerView.adapter?.notifyDataSetChanged()
+        }
+        else if(requestCode == UPC_SCAN_REQUEST && resultCode == RESULT_OK && data != null) {
+            val upc = data.getLongExtra("value", 0)
+            viewModel.search(upc)
         }
     }
 

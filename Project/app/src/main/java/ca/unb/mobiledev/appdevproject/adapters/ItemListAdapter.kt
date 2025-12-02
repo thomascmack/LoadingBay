@@ -28,6 +28,7 @@ class ItemListAdapter(val productList : ProductList, val upc : Long, val parentA
         var items = productList.getProduct(upc)?.items ?: mutableListOf()
     lateinit var mRecyclerView : RecyclerView
     lateinit var context : Context
+    val EDIT_REQUEST_CODE = 1
 
 
     override fun onCreateViewHolder(
@@ -83,7 +84,7 @@ class ItemListAdapter(val productList : ProductList, val upc : Long, val parentA
             intent.putExtra("upc", item.upc)
             intent.putExtra("damaged", item.damaged)
             intent.putExtra("description", item.description)
-            (context as Activity).startActivityForResult(intent , 0)
+            (context as Activity).startActivityForResult(intent , EDIT_REQUEST_CODE)
         }
     }
 

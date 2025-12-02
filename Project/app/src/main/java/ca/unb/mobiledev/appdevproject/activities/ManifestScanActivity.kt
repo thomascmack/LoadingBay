@@ -1,8 +1,10 @@
 package ca.unb.mobiledev.appdevproject.activities
 
+import android.Manifest
+import android.app.ComponentCaller
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
@@ -11,46 +13,41 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import ca.unb.mobiledev.appdevproject.R
 import ca.unb.mobiledev.appdevproject.classes.ProductList
 import ca.unb.mobiledev.appdevproject.ui.MyViewModel
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
-import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
-
 
 class ManifestScanActivity : ComponentActivity() {
-
-    private lateinit var scanner : GmsBarcodeScanner
     private lateinit var scanButton : Button
     private lateinit var scanManualButton : Button
     private lateinit var viewModel : MyViewModel
     private lateinit var dialog : Dialog
+    private val CAMERA_PERMISSION: Array<String> = arrayOf(Manifest.permission.CAMERA)
+    private val CAMERA_REQUEST_CODE: Int = 10
+    private val QR_SCAN_REQUEST = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manifest_scan)
-
-        val options = GmsBarcodeScannerOptions.Builder()
-            .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
-            .build()
-
-        scanner = GmsBarcodeScanning.getClient(this, options)
 
         scanButton = findViewById(R.id.QRscanButton)
         scanManualButton = findViewById(R.id.manualButton)
 
 
         scanButton.setOnClickListener {
-            scanQRCode(this)
+            if (hasCameraPermission()) {
+                startScan()
+            } else {
+                requestPermission()
+            }
         }
 
         dialog = Dialog(this, R.style.DialogWindowTheme)
 
         scanManualButton.setOnClickListener {
-            //dialog = Dialog(this, R.style.DialogWindowTheme)
             dialog.setContentView(R.layout.enter_shippment_id_dialog)
             val idEditText = dialog.findViewById<EditText>(R.id.shipmentID)
             dialog.window!!
@@ -114,20 +111,53 @@ class ManifestScanActivity : ComponentActivity() {
         }
     }
 
-    fun scanQRCode(context : Context) {
-        //start scan and handle results
-        scanner.startScan()
-            .addOnSuccessListener { barcode ->
-                val rawValue: String? = barcode.rawValue
-                val id = rawValue?.toLong() ?: 0
-                viewModel.findManifest(id)
-            }
-            .addOnFailureListener { e ->
-                val duration = Toast.LENGTH_SHORT
+    private fun hasCameraPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
 
-                val toast = Toast.makeText(context, e.toString(), duration)
-                toast.show()
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            CAMERA_PERMISSION,
+            CAMERA_REQUEST_CODE
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            CAMERA_REQUEST_CODE -> if (grantResults.isNotEmpty() &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED
+            ) {
+                startScan()
+            } else {
+                Toast.makeText(this, "Please grant camera permission", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun startScan() {
+        val intent = Intent(this, CameraActivity::class.java)
+        startActivityForResult(intent, QR_SCAN_REQUEST)
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+        caller: ComponentCaller
+    ) {
+        super.onActivityResult(requestCode, resultCode, data, caller)
+        if (requestCode == QR_SCAN_REQUEST && resultCode == RESULT_OK && data != null) {
+            val shipmentID = data.getLongExtra("value",  0)
+            viewModel.findManifest(shipmentID)
+        }
     }
 
     companion object {
