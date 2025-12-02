@@ -100,17 +100,20 @@ class ItemListAdapter(val productList : ProductList, val upc : Long, val parentA
         if(item.flag != "Missing") {
             holder.deleteButton.visibility = View.VISIBLE
             holder.editButton.visibility = View.VISIBLE
-            holder.item.setBackgroundColor(holder.resources!!.getColor(R.color.light_green))
+            holder.item.background = holder.resources!!.getDrawable(R.drawable.item_received)
+            //holder.item.setBackgroundColor(holder.resources!!.getColor(R.color.light_green))
         }
         else {
             holder.deleteButton.visibility = View.GONE
             holder.editButton.visibility = View.GONE
-            holder.item.setBackgroundColor(holder.resources!!.getColor(R.color.off_white))
+            holder.item.background = holder.resources!!.getDrawable(R.drawable.item_missing)
+            //holder.item.setBackgroundColor(holder.resources!!.getColor(R.color.off_white))
         }
 
         if(item.damaged) {
             holder.itemDamagedTextView.visibility = View.VISIBLE
-            holder.item.setBackgroundColor(holder.resources!!.getColor(R.color.light_orange))
+            holder.item.background = holder.resources!!.getDrawable(R.drawable.item_damaged)
+            //holder.item.setBackgroundColor(holder.resources!!.getColor(R.color.light_orange))
         }
         else {
             holder.itemDamagedTextView.visibility = View.GONE

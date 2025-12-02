@@ -301,6 +301,7 @@ class ItemScanActivity : ComponentActivity() {
         when (view) {
             startView -> {
                 if(noItemView.isVisible) return
+                viewFullList.text = getString(R.string.view_full_list)
                 startView.visibility = View.VISIBLE
                 scannedView.visibility = View.GONE
                 noItemView.visibility = View.GONE
@@ -308,6 +309,7 @@ class ItemScanActivity : ComponentActivity() {
             }
             scannedView -> {
                 updateScannedView()
+                viewFullList.text = getString(R.string.view_full_list)
                 startView.visibility = View.GONE
                 scannedView.visibility = View.VISIBLE
                 noItemView.visibility = View.GONE
@@ -315,6 +317,7 @@ class ItemScanActivity : ComponentActivity() {
             }
             noItemView -> {
                 Log.d("Items", "no item view")
+                viewFullList.text = getString(R.string.view_full_list)
                 startView.visibility = View.GONE
                 scannedView.visibility = View.GONE
                 noItemView.visibility = View.VISIBLE
@@ -324,6 +327,7 @@ class ItemScanActivity : ComponentActivity() {
                 startView.visibility = View.GONE
                 scannedView.visibility = View.GONE
                 noItemView.visibility = View.GONE
+                viewFullList.text = getString(R.string.view_curr_item)
                 productRecyclerView.visibility = View.VISIBLE
                 productRecyclerView.adapter?.notifyDataSetChanged()
             }

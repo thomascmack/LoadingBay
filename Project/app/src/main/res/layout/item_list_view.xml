@@ -1,82 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
-    >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:id="@+id/itemName"
-        android:textSize="20sp"
-        android:layout_marginStart="20dp"
-        android:text="@string/item_name"
-        android:layout_marginEnd="20dp"
-        android:maxLines="2"
-        android:layout_marginTop="15dp"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:id="@+id/flag"
-        android:textSize="20sp"
-        android:layout_marginStart="20dp"
-        android:text="@string/flag"
-        android:layout_marginEnd="20dp"
-        android:maxLines="2"
-        android:layout_marginTop="15dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/itemName"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:id="@+id/description"
-        android:textSize="20sp"
-        android:layout_marginStart="20dp"
-        android:text="@string/itemDescription"
-        android:layout_marginEnd="20dp"
-        android:maxLines="1"
-        android:layout_marginTop="15dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/flag"
-        android:layout_toEndOf="@+id/damaged"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:id="@+id/damaged"
-        android:textSize="20sp"
-        android:layout_marginStart="20dp"
-        android:text="@string/damaged"
-        android:layout_marginEnd="20dp"
-        android:maxLines="1"
-        android:layout_marginTop="15dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/flag" />
+    android:padding="10dp">
 
     <Button
         android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/button4"
-        android:layout_margin="3dp"
         android:text="@string/delete"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:layout_below="@+id/itemName"
-        android:layout_toEndOf="@id/editButton"/>
+        app:layout_constraintBottom_toTopOf="@+id/editButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/editButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/button2"
-        android:layout_margin="3dp"
         android:text="@string/edit"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:layout_below="@+id/itemName"
-        android:layout_toEndOf="@id/flag"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deleteButton" />
 
-</RelativeLayout>
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/rightBarrier"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="deleteButton,editButton"
+        android:layout_height="0dp"
+        android:layout_width="0dp"/>
+
+    <TextView
+        android:id="@+id/itemName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:text="@string/item_name"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightBarrier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/flag"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="12dp"
+        android:maxLines="2"
+        android:text="@string/flag"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightBarrier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemName" />
+
+    <TextView
+        android:id="@+id/damaged"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="12dp"
+        android:maxLines="1"
+        android:text="@string/damaged"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightBarrier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/flag" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/itemDescription"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rightBarrier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/damaged" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
