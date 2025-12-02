@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">App Dev Project</string>
+    <string name="app_name">Loading Bay</string>
     <string name="scan_qr_code">Scan Product</string>
     <string name="item_id">Product Code: %d </string>
     <string name="item_name">%s</string>
