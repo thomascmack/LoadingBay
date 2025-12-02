@@ -12,7 +12,7 @@ class ProductList(val shipmentID : Long,
     override fun add(e: ProductWithItems): Boolean {
         if(getProduct(e.product.upc) != null) return false
         for(i in e.items) {
-            i.flag = "Missing"
+            if(i.flag == "In Transit") i.flag = "Missing"
         }
         return super.add(e)
     }
@@ -23,17 +23,24 @@ class ProductList(val shipmentID : Long,
             addItem(upc, itemName, p.items)
             return
         }
+        Log.d("Extra", itemName)
         val newP = Product(upc, itemName)
         maxItemID++
         val newI = MutableList(1) {Item(maxItemID, shipmentID, upc, "Extra")}
         this.add(ProductWithItems(newP, newI))
         scanStack.add(ScanData(upc, itemName, maxItemID))
+        for(i in getProduct(upc)?.items!!) {
+            Log.d("Extra", i.toString())
+        }
     }
 
     fun undo() {
         if(scanStack.isEmpty()) return
         val p = getProduct(scanStack.last().upc)
-        p?.let { removeItem(scanStack.last().itemID, p.items) }
+        p?.let {
+            removeItem(scanStack.last().itemID, p.items)
+            if(p.items.isEmpty()) removeProduct(scanStack.last().upc)
+        }
         scanStack.removeAt(scanStack.size - 1)
     }
 
@@ -126,6 +133,12 @@ class ProductList(val shipmentID : Long,
                     return
                 }
             }
+        }
+    }
+
+    fun removeProduct(upc : Long) {
+        for(p in this) {
+            if(p.product.upc == upc) remove(p)
         }
     }
 

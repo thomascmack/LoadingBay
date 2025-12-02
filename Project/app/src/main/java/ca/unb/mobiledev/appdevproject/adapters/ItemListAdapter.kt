@@ -22,7 +22,7 @@ import ca.unb.mobiledev.appdevproject.classes.ProductList
 import ca.unb.mobiledev.appdevproject.entities.Item
 
 private lateinit var dialog : Dialog
-class ItemListAdapter(val productList : ProductList, upc : Long, val parentAdapter : ProductListAdapter) :
+class ItemListAdapter(val productList : ProductList, val upc : Long, val parentAdapter : ProductListAdapter) :
     RecyclerView.Adapter<ItemListAdapter.MyViewHolder>() {
 
         var items = productList.getProduct(upc)?.items ?: mutableListOf()
@@ -65,6 +65,7 @@ class ItemListAdapter(val productList : ProductList, upc : Long, val parentAdapt
 
             confirmButton.setOnClickListener {
                 productList.removeItem(holder.absoluteAdapterPosition, items)
+                if(items.isEmpty()) productList.removeProduct(upc)
                 notifyDataSetChanged()
                 parentAdapter.notifyDataSetChanged()
                 dialog.cancel()

@@ -187,6 +187,7 @@ class ItemScanActivity : ComponentActivity() {
                 if(products.isNotEmpty()) {
                     dialog.dismiss()
                     for (p in products) {
+                        Log.d("Extra", p.itemName)
                         manifest.scanItem(p.upc, p.itemName)
                     }
                     switchViewTo(scannedView)
@@ -270,6 +271,7 @@ class ItemScanActivity : ComponentActivity() {
             .addOnSuccessListener { barcode ->
                 val rawValue: String? = barcode.rawValue
                 val id = rawValue?.toLong() ?: 0
+                Log.d("UPC", "$id")
                 viewModel.search(id)
             }
             .addOnFailureListener { e ->
