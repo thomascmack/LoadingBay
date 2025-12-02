@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_background">
@@ -8,7 +9,7 @@
     <TextView
         android:id="@+id/itemName"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:padding="18dp"
         android:text="@string/item_name"
         android:textColor="@color/dark_grey"
@@ -23,38 +24,38 @@
         android:id="@+id/itemID"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
         android:padding="3dp"
         android:text="@string/item_id"
         android:textColor="@color/dark_grey"
         android:textSize="20sp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/itemName"
+        app:layout_constraintBottom_toTopOf="@+id/damaged"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/itemName"
+        app:layout_constraintVertical_bias="0.0" />
 
     <CheckBox
         android:id="@+id/damaged"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="236dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="36dp"
         android:buttonTint="@color/green"
-        android:minHeight="48dp"
         android:text="@string/damaged"
         android:textColor="@color/dark_grey"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/description"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/itemID"
-        app:layout_constraintVertical_bias="0.911" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="4dp"
         android:background="@drawable/textfield1"
         android:hint="@string/description"
         android:inputType="text"
