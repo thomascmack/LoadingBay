@@ -25,6 +25,7 @@
                 android:layout_marginEnd="20dp"
                 android:maxLines="1"
                 android:text="@string/item_name"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
 
             <TextView
@@ -37,6 +38,7 @@
                 android:layout_marginEnd="20dp"
                 android:maxLines="1"
                 android:text="@string/receivedCount"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
 
             <TextView
@@ -48,6 +50,7 @@
                 android:layout_toEndOf="@+id/received"
                 android:maxLines="1"
                 android:text="@string/count_damaged"
+                android:textColor="@color/white"
                 android:textSize="18sp" />
 
 
@@ -60,6 +63,7 @@
                 android:layout_marginTop="3dp"
                 android:layout_marginEnd="20dp"
                 android:text="@string/item_id"
+                android:textColor="@color/white"
                 android:textSize="16sp" />
 
             <TextView
