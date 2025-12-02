@@ -22,6 +22,7 @@ class ConfirmManifestActivity : AppCompatActivity() {
     lateinit var damaged: TextView
     lateinit var missing: TextView
     lateinit var extra: TextView
+    val EDIT_REQUEST_CODE = 1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,7 +91,7 @@ class ConfirmManifestActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 0 && resultCode == RESULT_OK && data != null) {
+        if (requestCode == EDIT_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             val itemID = data.getLongExtra("itemID", 0)
             val upc = data.getLongExtra("upc", 0)
             val damaged = data.getBooleanExtra("damaged", false)

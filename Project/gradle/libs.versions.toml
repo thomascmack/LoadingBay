@@ -1,5 +1,7 @@
 [versions]
 agp = "8.13.1"
+barcodeScanning = "17.3.0"
+cameraLifecycle = "1.5.1"
 daggerCompiler = "2.51.1"
 daggerCompilerVersion = "2.57.2"
 kotlin = "2.2.21"
@@ -19,7 +21,11 @@ leanback = "1.0.0"
 glide = "4.11.0"
 
 [libraries]
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraLifecycle" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraLifecycle" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraLifecycle" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanning" }
 dagger-compiler-v2511 = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompiler" }
 google-dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompilerVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
